@@ -1,16 +1,49 @@
-# React + Vite
+# Art Fight - ODV Edition 🎨⚔️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição artística entre amigos. O sistema automatiza o cálculo de pontos de "ataques" (artes enviadas) e gerencia a disputa entre duas equipes rivais.
 
-Currently, two official plugins are available:
+## 🔗 Links do Projeto
+* **Design (Figma):** [ArtFightODV-EDITION](https://www.figma.com/design/SEiTWjGIn6w7YF1G63VCgK/ArtFightODV-EDITION?node-id=0-1&p=f&t=PSWNL8auQvuKYrNw-0)
+* **Documentação Técnica:** `docs/ART FIGHT (ODV EDITION).pdf`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Funcionalidades (Requisitos)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Requisitos Funcionais (RF)
+* **RF01 - Autenticação & Onboarding:** Login/Cadastro via Supabase. No primeiro acesso, o usuário deve escolher seu time obrigatoriamente.
+* **RF02 - Registro de Ataque:** Formulário para envio de arte (upload, alvo, tipo de pintura, cenário, quantidade de personagens e fogo amigo).
+* **RF03 - Motor de Pontos:** Cálculo automático baseado nos critérios técnicos.
+* **RF04 - Galeria Tripartite:** Interface com Grid de miniaturas (esquerda), Preview ampliado (centro) e Ranking/Leaderboard (direita).
 
-## Expanding the ESLint configuration
+### Requisitos Não Funcionais (RNF)
+* **RNF01 - Usabilidade:** Interface *clean* otimizada para o fluxo de artistas.
+* **RNF02 - Performance:** Entrega de imagens otimizada via Supabase Storage.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Stack Tecnológica
+* **Frontend:** React.js (Vite).
+* **Estilização:** Tailwind CSS.
+* **Backend/Database:** Supabase (PostgreSQL).
+* **Hospedagem:** Vercel.
+
+---
+
+## 📊 Regra de Negócio (Pontuação)
+O cálculo segue a ordem de precedência técnica:
+**Total = [(Pintura × Tamanho) × Qtd_Personagens] + Pontos_Fundo + Doodles**
+
+---
+
+## 📂 Estrutura de Pastas
+```text
+.
+├── docs/               # Documentação técnica e requisitos
+├── public/             # Ativos estáticos (favicons, etc)
+├── src/                # Código-fonte React
+│   ├── assets/         # Imagens e estilos globais
+│   └── ...
+├── .gitignore          # Arquivos ignorados pelo Git
+├── README.md           # Este arquivo
+└── tailwind.config.js  # Configuração do Tailwind
