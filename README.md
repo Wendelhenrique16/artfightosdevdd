@@ -31,7 +31,7 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 ---
 
 ## 📊 Regra de Negócio (Pontuação)
-O cálculo segue a ordem de precedência técnica:
+O cálculo segue a ordem de precedência técnica:  
 **Total = [(Pintura × Tamanho) × Qtd_Personagens] + Pontos_Fundo + Doodles**
 
 ---
