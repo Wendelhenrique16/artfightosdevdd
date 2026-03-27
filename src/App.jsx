@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import gilmara from "./assets/images/gilmara.png";
+import ocnalb from "./assets/images/ocnalb.png";  
+import hopeSerin from "./assets/images/hopeSerin.png";
+import galaxy from "./assets/images/galaxy.png";  
 
 function App() {
   const [personagens, setPersonagens] = useState(1);
@@ -24,7 +28,7 @@ function App() {
 
       document.querySelector(".front-layer")?.style.setProperty(
         "transform",
-        `translateY(${y * 0.9}px)`
+        `translateY(${y * 0.3}px)`
       );
     };
 
@@ -40,20 +44,41 @@ function App() {
 
       {/* 🔥 HERO */}
       <section className="h-screen flex flex-col items-center justify-center text-center">
-        <h1 className="text-3xl font-bold tracking-widest uppercase mb-4">
+       <h1 
+  className="text-[64px] tracking-widest uppercase mb-4"
+  style={{ fontFamily: 'Anton, sans-serif' }}
+>
           Bem vindo ao Artfight (ODV Edition)
         </h1>
+        <p className="text-[24px] text-gray-400 mb-[21px]"
+          style={{ fontFamily: 'Crimson Pro, serif' }}>
+          Onde os de verdade se reunem para desenhar os personagens uns dos outros.
+        </p>  
 
         <div className="flex gap-4">
           <a href="#registro">
-            <button className="bg-white/10 hover:bg-white/20 px-6 py-2 border border-white/20 text-sm">
-              Registrar Ataque
-            </button>
+<button
+  className="bg-[#444444] hover:bg-[#555555] border border-[#444444] 
+             w-[196px] h-[42px] text-[24px] rounded-[12px]
+             flex items-center justify-center"
+  style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+>
+  Registrar Ataque
+</button>
           </a>
 
-          <button className="bg-white/10 hover:bg-white/20 px-6 py-2 border border-white/20 text-sm">
-            Ver Ataques
-          </button>
+<button
+  className="bg-[#201E27] hover:bg-[#2a2833] 
+             border border-white/25 
+             w-[255px] h-[42px]
+             text-[24px] 
+             rounded-[12px]
+             flex items-center justify-center
+             transition-colors duration-200"
+  style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+>
+  Visualizar ultimos ataques
+</button>
         </div>
       </section>
 
@@ -76,15 +101,15 @@ function App() {
         <div className="front-layer absolute inset-0">
 
           <div className="absolute top-20 left-10 rotate-[-10deg]">
-            <img src="/art1.png" className="w-32" />
+            <img src={gilmara} className="w-32" />
           </div>
 
           <div className="absolute top-40 right-10 rotate-[10deg]">
-            <img src="/art2.png" className="w-36" />
+            <img src={ocnalb} className="w-36" />
           </div>
 
           <div className="absolute bottom-20 left-20 rotate-[-5deg]">
-            <img src="/art3.png" className="w-40" />
+            <img src={hopeSerin} className="w-40" />
           </div>
 
           <div className="absolute bottom-10 right-10 rotate-[15deg]">

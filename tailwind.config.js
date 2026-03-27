@@ -8,4 +8,10 @@ export default {
     extend: {},
   },
   plugins: [],
+  
+  extend: {
+  fontFamily: {
+    anton: ['Anton', 'sans-serif'],
+  },
+}
 }
