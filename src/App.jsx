@@ -1,76 +1,166 @@
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 
 function App() {
-  // Estados para capturar as escolhas do artista
-  const [personagens, setPersonagens] = useState(1)
-  const [finalizacao, setFinalizacao] = useState(1) // 1: Rascunho, 2: Cagada, 3: Finalizado
-  const [tamanho, setTamanho] = useState(1) // 1: Icon, 2: Meio, 3: Inteiro
-  const [fundo, setFundo] = useState(0) // 0: Branco, 1: Pobre, 2: Decente, 3: Excelente
+  const [personagens, setPersonagens] = useState(1);
+  const [finalizacao, setFinalizacao] = useState(1);
+  const [tamanho, setTamanho] = useState(1);
 
-  //REGRA: (Tamanho * Finalização * Personagens) + Fundo
-  const total = (tamanho * finalizacao * personagens) + fundo
+  const total = personagens * finalizacao * tamanho;
+
+  // 🔥 PARALLAX
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+
+      document.querySelector(".bg-layer")?.style.setProperty(
+        "transform",
+        `translateY(${y * 0.2}px)`
+      );
+
+      document.querySelector(".mid-layer")?.style.setProperty(
+        "transform",
+        `translateY(${y * 0.5}px)`
+      );
+
+      document.querySelector(".front-layer")?.style.setProperty(
+        "transform",
+        `translateY(${y * 0.9}px)`
+      );
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-6 text-white font-sans">
-      <div className="bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700 w-full max-w-md">
-        <h1 className="text-3xl font-black text-center mb-8 text-cyan-400 uppercase tracking-tighter italic">
-          ARTFIGHT ODV EDITION
+    <div className="bg-[#000000] text-white overflow-x-hidden">
+
+      {/* 🌌 GALAXIA */}
+      <div className="fixed inset-0 -z-20 bg-[url('/galaxy.png')] bg-cover bg-center opacity-40" />
+
+      {/* 🔥 HERO */}
+      <section className="h-screen flex flex-col items-center justify-center text-center">
+        <h1 className="text-3xl font-bold tracking-widest uppercase mb-4">
+          Bem vindo ao Artfight (ODV Edition)
         </h1>
 
-        <div className="space-y-6">
-          {/* Campo de Personagens */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-bold text-slate-400 uppercase">Quantidade de Personagens</label> //antes qtd
-            <input 
-              type="number" 
-              min="1"
-              value={personagens}
-              onChange={(e) => setPersonagens(Math.max(1, Number(e.target.value)))}
-              className="bg-slate-900 border border-slate-700 p-3 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"
-            />
+        <div className="flex gap-4">
+          <a href="#registro">
+            <button className="bg-white/10 hover:bg-white/20 px-6 py-2 border border-white/20 text-sm">
+              Registrar Ataque
+            </button>
+          </a>
+
+          <button className="bg-white/10 hover:bg-white/20 px-6 py-2 border border-white/20 text-sm">
+            Ver Ataques
+          </button>
+        </div>
+      </section>
+
+      {/* 🎮 PARALLAX SCROLL */}
+      <section className="relative h-[120vh] overflow-hidden">
+
+        {/* FUNDO */}
+        <div className="bg-layer absolute inset-0">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
+        </div>
+
+        {/* MEIO */}
+        <div className="mid-layer absolute inset-0">
+          <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
+          <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
+        </div>
+
+        {/* FRENTE (SUAS ARTES) */}
+        <div className="front-layer absolute inset-0">
+
+          <div className="absolute top-20 left-10 rotate-[-10deg]">
+            <img src="/art1.png" className="w-32" />
           </div>
 
-          {/* Grid de Selects para economizar espaço */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-slate-400 uppercase">Finalização</label>
-              <select value={finalizacao} onChange={(e) => setFinalizacao(Number(e.target.value))} className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
-                <option value={1}>Rascunho (1)</option>
-                <option value={2}>Básica (2)</option>
-                <option value={3}>Finalizada (3)</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-slate-400 uppercase">Tamanho</label>
-              <select value={tamanho} onChange={(e) => setTamanho(Number(e.target.value))} className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
-                <option value={1}>Icon (1)</option>
-                <option value={2}>Meio (2)</option>
-                <option value={3}>Inteiro (3)</option>
-              </select>
-            </div>
+          <div className="absolute top-40 right-10 rotate-[10deg]">
+            <img src="/art2.png" className="w-36" />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-bold text-slate-400 uppercase">Cenário/Fundo</label>
-            <select value={fundo} onChange={(e) => setFundo(Number(e.target.value))} className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
-              <option value={0}>Branco (0)</option>
-              <option value={1}>Básico (1)</option>
-              <option value={2}>Decente (2)</option>
-              <option value={3}>Avançado (3)</option>
-            </select>
+          <div className="absolute bottom-20 left-20 rotate-[-5deg]">
+            <img src="/art3.png" className="w-40" />
+          </div>
+
+          <div className="absolute bottom-10 right-10 rotate-[15deg]">
+            <img src="/art4.png" className="w-28" />
+          </div>
+
+        </div>
+      </section>
+
+      {/* 🧾 REGISTRO (AGORA IGUAL AO SEU) */}
+      <section
+        id="registro"
+        className="flex flex-col items-center justify-center py-20 px-4"
+      >
+
+        <h1 className="text-4xl font-bold tracking-widest mb-10 uppercase">
+          Art Fight ODV Edition
+        </h1>
+
+        <div className="flex gap-6 bg-[#1B2038] p-6 rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(124,92,255,0.2)] max-w-5xl w-full">
+
+          {/* ESQUERDA */}
+          <div className="flex-1 bg-gradient-to-br from-[#1B2038] to-[#14182c] rounded-xl border border-purple-500/20 flex flex-col items-center justify-center p-6">
+
+            <span className="text-xs text-gray-400 mb-4 tracking-widest">
+              [ ARRASTE OU CLIQUE AQUI PARA ENVIAR SUA ARTE ]
+            </span>
+
+            <img src="/art1.png" className="w-48" />
+          </div>
+
+          {/* DIREITA */}
+          <div className="w-64 bg-[#14182c] rounded-xl border border-white/10 p-4 flex flex-col items-center">
+
+            <span className="text-xs text-gray-400 uppercase">
+              Registrar novo ataque
+            </span>
+
+            <span className="text-6xl font-black mt-2">{total}</span>
+            <span className="text-sm text-gray-400 mb-4">Pontos</span>
+
+            <div className="w-full space-y-3">
+
+              <input
+                placeholder="Quem está sendo atacado?"
+                className="w-full bg-black/40 border border-white/10 p-2 text-xs"
+              />
+
+              <select
+                value={finalizacao}
+                onChange={(e) => setFinalizacao(Number(e.target.value))}
+                className="w-full bg-black/40 border border-white/10 p-2 text-xs"
+              >
+                <option value={1}>Cenário</option>
+                <option value={2}>Completo</option>
+              </select>
+
+              <select
+                value={tamanho}
+                onChange={(e) => setTamanho(Number(e.target.value))}
+                className="w-full bg-black/40 border border-white/10 p-2 text-xs"
+              >
+                <option value={1}>Pintura simples</option>
+                <option value={2}>Detalhado</option>
+              </select>
+
+            </div>
           </div>
         </div>
 
-        {/* O RESULTADO FINAL */}
-        <div className="mt-10 pt-8 border-t border-slate-700 text-center">
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-2">Pontuação Total</p>
-          <div className="text-7xl font-black text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-            {total}
-          </div>
-        </div>
-      </div>
+        <button className="mt-8 bg-[#7C5CFF] hover:bg-[#6a4de0] px-10 py-4 text-xl font-bold rounded-xl">
+          ENVIAR ATAQUE
+        </button>
+      </section>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
