@@ -4,6 +4,8 @@ import ocnalb from "./assets/images/ocnalb.png";
 import hopeSerin from "./assets/images/hopeSerin.png";
 import galaxy from "./assets/images/galaxy.png";  
 import { animate } from "framer-motion";
+import { Parallax, ParallaxLayer } from "@react-spring/parallax";
+import { useRef } from "react";
 
 
 function App() {
