@@ -3,6 +3,7 @@ import gilmara from "./assets/images/gilmara.png";
 import ocnalb from "./assets/images/ocnalb.png";  
 import hopeSerin from "./assets/images/hopeSerin.png";
 import galaxy from "./assets/images/galaxy.png";  
+import { animate } from "framer-motion";
 
 
 function App() {
@@ -35,13 +36,18 @@ function App() {
           <a href="#registro">
 <button
   onClick={() => {
-    document.getElementById('registro').scrollIntoView({ 
-      behavior: 'smooth' 
-    });
+    const elemento = document.getElementById("registro");
+    if (elemento) {
+      const top = elemento.offsetTop;
+      animate(window.scrollY, top, {
+        type: "tween",
+        duration: 2, // 👈 AQUI você controla a lentidão (2 segundos)
+        ease: "easeInOut",
+        onUpdate: (latest) => window.scrollTo(0, latest),
+      });
+    }
   }}
-  className="bg-[#444444] hover:bg-[#555555] border border-[#444444] 
-             w-[196px] h-[42px] text-[24px] rounded-[12px]
-             flex items-center justify-center"
+  className="bg-[#444444] hover:bg-[#555555] w-[196px] h-[42px] text-[24px] rounded-[12px]"
   style={{ fontFamily: 'Bebas Neue, sans-serif' }}
 >
   Registrar Ataque
@@ -100,7 +106,7 @@ function App() {
         </div>
       </section>
 
-      {/* 🧾 REGISTRO (AGORA IGUAL AO SEU) */}
+  
       <section
         id="registro"
         className="flex flex-col items-center justify-center py-20 px-4"
