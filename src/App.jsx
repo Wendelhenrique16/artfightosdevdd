@@ -4,37 +4,13 @@ import ocnalb from "./assets/images/ocnalb.png";
 import hopeSerin from "./assets/images/hopeSerin.png";
 import galaxy from "./assets/images/galaxy.png";  
 
+
 function App() {
   const [personagens, setPersonagens] = useState(1);
   const [finalizacao, setFinalizacao] = useState(1);
   const [tamanho, setTamanho] = useState(1);
 
   const total = personagens * finalizacao * tamanho;
-
-  // 🔥 PARALLAX
-  useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY;
-
-      document.querySelector(".bg-layer")?.style.setProperty(
-        "transform",
-        `translateY(${y * 0.2}px)`
-      );
-
-      document.querySelector(".mid-layer")?.style.setProperty(
-        "transform",
-        `translateY(${y * 0.5}px)`
-      );
-
-      document.querySelector(".front-layer")?.style.setProperty(
-        "transform",
-        `translateY(${y * 0.3}px)`
-      );
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <div className="bg-[#000000] text-white overflow-x-hidden">
