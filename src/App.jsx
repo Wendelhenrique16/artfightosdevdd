@@ -34,6 +34,11 @@ function App() {
         <div className="flex gap-4">
           <a href="#registro">
 <button
+  onClick={() => {
+    document.getElementById('registro').scrollIntoView({ 
+      behavior: 'smooth' 
+    });
+  }}
   className="bg-[#444444] hover:bg-[#555555] border border-[#444444] 
              w-[196px] h-[42px] text-[24px] rounded-[12px]
              flex items-center justify-center"
