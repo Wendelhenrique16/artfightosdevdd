@@ -12,15 +12,14 @@ function App() {
   const [personagens, setPersonagens] = useState(1);
   const [finalizacao, setFinalizacao] = useState(1);
   const [tamanho, setTamanho] = useState(1);
-
+  const parallaxRef = useRef();
   const total = personagens * finalizacao * tamanho;
 
   return (
-    <div className="bg-[#000000] text-white overflow-x-hidden">
-
+  <Parallax pages={3} ref={parallaxRef}>
       {/* 🌌 GALAXIA */}
       <div className="fixed inset-0 -z-20 bg-[url('/galaxy.png')] bg-cover bg-center opacity-40" />
-
+<ParallaxLayer offset={0} speed={0.5}>
       {/* 🔥 HERO */}
       <section className="h-screen flex flex-col items-center justify-center text-center">
        <h1 
@@ -43,7 +42,7 @@ function App() {
       const top = elemento.offsetTop;
       animate(window.scrollY, top, {
         type: "tween",
-        duration: 2, // 👈 AQUI você controla a lentidão (2 segundos)
+        duration: 2, 
         ease: "easeInOut",
         onUpdate: (latest) => window.scrollTo(0, latest),
       });
@@ -70,7 +69,10 @@ function App() {
 </button>
         </div>
       </section>
-
+      </ParallaxLayer>
+<ParallaxLayer offset={0} speed={0} factor={3}>
+  <div className="fixed inset-0 bg-[url('/galaxy.png')] bg-cover opacity-40" />
+</ParallaxLayer>
       {/* 🎮 PARALLAX SCROLL */}
       <section className="relative h-[120vh] overflow-hidden">
 
@@ -173,7 +175,7 @@ function App() {
           ENVIAR ATAQUE
         </button>
       </section>
-    </div>
+    </Parallax>
   );
 }
 
