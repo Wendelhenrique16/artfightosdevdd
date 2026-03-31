@@ -89,14 +89,48 @@ onClick={() => {
       </ParallaxLayer>
 {/* 🎮 GALERIA (Página 1) */}
 
-{/* 🟣 FUNDO (bem lento) */}
-<ParallaxLayer offset={1} speed={0.1}>
+{/* 🟣 FUNDO PROFUNDO (quase infinito) */}
+<ParallaxLayer offset={1} speed={0.05}>
   <div className="absolute inset-0 pointer-events-none">
-    <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
-    <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
 
-    <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
-    <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
+    {/* 💀 LOSANGO GIGANTE (o principal) */}
+    <div className="absolute left-1/2 top-1/2 
+      w-[120vw] h-[120vw] 
+      -translate-x-1/2 -translate-y-1/2
+      bg-purple-500/5 
+      rotate-45 
+      blur-[120px] 
+      opacity-40"
+    />
+
+    {/* 🧊 LOSANGO SECUNDÁRIO */}
+    <div className="absolute top-[20vh] left-[10vw] 
+      w-[80vw] h-[80vw] 
+      bg-blue-500/5 
+      rotate-45 
+      blur-[100px] 
+      opacity-30"
+    />
+
+    {/* 🖼️ IMAGENS DISTANTES (bem sutis) */}
+    <img 
+      src="/bg1.png"
+      className="absolute top-[10vh] left-[20vw] 
+      w-[30vw] opacity-10 blur-sm"
+    />
+
+    <img 
+      src="/bg2.png"
+      className="absolute bottom-[15vh] right-[15vw] 
+      w-[25vw] opacity-10 blur-sm"
+    />
+
+    <img 
+      src="/bg3.png"
+      className="absolute top-[50vh] left-[60vw] 
+      w-[20vw] opacity-10 blur-sm"
+    />
+
   </div>
 </ParallaxLayer>
 
