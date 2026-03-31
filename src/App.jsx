@@ -18,7 +18,7 @@ function App() {
       <div className="fixed inset-0 -z-20 bg-black" />
 
       {/* 🔥 HERO */}
-      <ParallaxLayer offset={0} speed={0.5}>
+     <ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
         <section className="h-screen flex flex-col items-center justify-center text-center">
           <h1 
             className="text-[64px] tracking-widest uppercase mb-4 text-white"
@@ -58,6 +58,19 @@ function App() {
           </div>
         </section>
       </ParallaxLayer>
+      <ParallaxLayer offset={0} speed={0.2} style={{ zIndex: 1 }}>
+  <div className="absolute inset-0 pointer-events-none">
+
+    {/* LOSANGOS FUNDO */}
+    <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
+    <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
+
+    {/* LOSANGOS MÉDIO */}
+    <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
+    <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
+
+  </div>
+</ParallaxLayer>
 
       {/* 🎮 PARALLAX SCROLL */}
       <ParallaxLayer offset={1} speed={0.3}>
