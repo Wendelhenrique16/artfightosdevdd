@@ -5,13 +5,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        anton: ['Anton', 'sans-serif'],
+        bebas: ['"Bebas Neue"', 'sans-serif'],
+        crimson: ['"Crimson Text"', 'serif'],
+      },
+    },
   },
   plugins: [],
-  
-  extend: {
-  fontFamily: {
-    anton: ['Anton', 'sans-serif'],
-  },
-}
 }
