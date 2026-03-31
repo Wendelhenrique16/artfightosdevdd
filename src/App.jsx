@@ -15,7 +15,7 @@ function App() {
   return (
     <Parallax pages={3} ref={parallaxRef}>
       
-<div className="fixed inset-0 -z-20 bg-black" />
+      <div className="fixed inset-0 -z-20 bg-black" />
 
       {/* 🔥 HERO */}
       <ParallaxLayer offset={0} speed={0.5}>
@@ -36,29 +36,8 @@ function App() {
 
           <div className="flex gap-4">
             <button
-              onClick={() => {
-  let t = 0;
-  const start = 0; // você sempre tá na tela 0 aqui
-  const end = 2;
-
-  const animateScroll = () => {
-    t += 0.02;
-
-    // easeInOut (suave de verdade)
-    const ease = t < 0.5
-      ? 2 * t * t
-      : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-    const value = start + (end - start) * ease;
-
-    parallaxRef.current.scrollTo(value);
-
-    if (t < 1) requestAnimationFrame(animateScroll);
-  };
-
-  animateScroll();
-}}
-              className="bg-[#444444] hover:bg-[#555555] w-[196px] h-[42px] text-[24px] rounded-[12px]"
+              onClick={() => parallaxRef.current?.scrollTo(2)}
+              className="relative z-10 bg-[#444444] hover:bg-[#555555] w-[196px] h-[42px] text-[24px] rounded-[12px]"
               style={{ fontFamily: 'Bebas Neue, sans-serif' }}
             >
               Registrar Ataque
@@ -85,19 +64,19 @@ function App() {
         <section className="relative h-screen overflow-hidden">
 
           {/* FUNDO */}
-          <div className="bg-layer absolute inset-0">
+          <div className="bg-layer absolute inset-0 pointer-events-none">
             <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
             <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
           </div>
 
           {/* MEIO */}
-          <div className="mid-layer absolute inset-0">
+          <div className="mid-layer absolute inset-0 pointer-events-none">
             <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
             <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
           </div>
 
           {/* FRENTE */}
-          <div className="front-layer absolute inset-0">
+          <div className="front-layer absolute inset-0 pointer-events-none">
             <div className="absolute top-20 left-10 rotate-[-10deg]">
               <img src={gilmara} className="w-32" />
             </div>
@@ -130,7 +109,6 @@ function App() {
 
           <div className="flex gap-6 bg-[#1B2038] p-6 rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(124,92,255,0.2)] max-w-5xl w-full">
 
-            {/* ESQUERDA */}
             <div className="flex-1 bg-gradient-to-br from-[#1B2038] to-[#14182c] rounded-xl border border-purple-500/20 flex flex-col items-center justify-center p-6">
               <span className="text-xs text-gray-400 mb-4 tracking-widest">
                 [ ARRASTE OU CLIQUE AQUI PARA ENVIAR SUA ARTE ]
@@ -139,7 +117,6 @@ function App() {
               <img src="/art1.png" className="w-48" />
             </div>
 
-            {/* DIREITA */}
             <div className="w-64 bg-[#14182c] rounded-xl border border-white/10 p-4 flex flex-col items-center">
               <span className="text-xs text-gray-400 uppercase">
                 Registrar novo ataque
