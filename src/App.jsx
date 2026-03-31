@@ -17,7 +17,7 @@ function App() {
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
 
   return (
-    <Parallax pages={3} ref={parallaxRef}>
+    <Parallax pages={3.5} ref={parallaxRef}>
       
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
