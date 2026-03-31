@@ -40,7 +40,29 @@ function App() {
 
           <div className="flex gap-4">
             <button
-              onClick={() => parallaxRef.current?.scrollTo(2)}
+onClick={() => {
+  const startTime = performance.now();
+  const duration = 5000; // pode até aumentar
+
+  const start = parallaxRef.current.current;
+  const end = 2;
+
+  const animate = (now) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // 🔥 EASE-OUT (melhor pra UX)
+    const ease = 1 - Math.pow(1 - progress, 2);
+
+    const value = start + (end - start) * ease;
+
+    parallaxRef.current.scrollTo(value);
+
+    if (progress < 1) requestAnimationFrame(animate);
+  };
+
+  requestAnimationFrame(animate);
+}}
               className="bg-[#444444] hover:bg-[#555555] w-[196px] h-[48px] text-[24px] rounded-[12px] text-white transition-all"
               style={bebasStyle}
             >
@@ -65,71 +87,78 @@ function App() {
           <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
         </div>
       </ParallaxLayer>
-
 {/* 🎮 GALERIA (Página 1) */}
-<ParallaxLayer offset={1} speed={0.3}>
-  <section className="relative h-screen overflow-hidden flex items-center justify-center">
 
-    {/* 1. CAMADA DE FUNDO (LOSANGOS) */}
-    <div className="absolute inset-0 pointer-events-none">
-      {/* Losangos roxo e azul esfumaçados */}
-      <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
-      <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
-      
-      {/* Losangos brancos médios */}
-      <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
-      <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
-    </div>
+{/* 🟣 FUNDO (bem lento) */}
+<ParallaxLayer offset={1} speed={0.1}>
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
+    <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rotate-45 blur-xl" />
 
-    {/* 2. TEXTO DE FUNDO (SUTIL) */}
+    <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
+    <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
+  </div>
+</ParallaxLayer>
+
+
+{/* 📝 TEXTO (velocidade média) */}
+<ParallaxLayer offset={1} speed={0.25}>
+  <div className="h-screen flex items-center justify-center pointer-events-none">
     <h2 
-      className="text-white text-[120px] opacity-5 uppercase tracking-[1.5em] select-none pointer-events-none" 
+      className="text-white text-[120px] opacity-5 uppercase tracking-[1.5em] select-none"
       style={bebasStyle}
     >
       GALERIA
     </h2>
-
-    {/* 3. ARTES FLUTUANTES (FRENTE) */}
-<div className="absolute inset-0 pointer-events-none">
-  
-  {/* Gilmara - Superior Esquerda */}
-  <div className="absolute top-[10vh] left-[5vw] rotate-[-10deg] transition-transform hover:scale-110 duration-500 pointer-events-auto">
-    <img 
-      src={gilmara} 
-      className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" 
-      alt="Arte Gilmara" 
-    />
   </div>
+</ParallaxLayer>
 
-  {/* Ocnalb - Superior Direita */}
-  <div className="absolute top-[20vh] right-[5vw] rotate-[10deg] transition-transform hover:scale-110 duration-500 pointer-events-auto">
-    <img 
-      src={ocnalb} 
-      className="w-[14vw] min-w-[140px] max-w-[260px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" 
-      alt="Arte Ocnalb" 
-    />
+
+{/* 🖼️ IMAGENS (rápidas = frente) */}
+<ParallaxLayer offset={1} speed={0.6}>
+  <div className="absolute inset-0">
+
+    {/* Gilmara */}
+    <div className="absolute top-[10vh] left-[5vw] rotate-[-10deg] transition-transform hover:scale-110 duration-500">
+      <img src={gilmara} className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    </div>
+
+    {/* Ocnalb */}
+    <div className="absolute top-[20vh] right-[5vw] rotate-[10deg] transition-transform hover:scale-110 duration-500">
+      <img src={ocnalb} className="w-[14vw] min-w-[140px] max-w-[260px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    </div>
+
+    {/* Hope */}
+    <div className="absolute bottom-[15vh] left-[8vw] rotate-[-5deg] transition-transform hover:scale-110 duration-500">
+      <img src={hopeSerin} className="w-[16vw] min-w-[160px] max-w-[300px] drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" />
+    </div>
+
+    {/* Art4 */}
+    <div className="absolute bottom-[8vh] right-[5vw] rotate-[15deg] transition-transform hover:scale-110 duration-500">
+      <img src="/art4.png" className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    </div>
+
+    {/* Art5 */}
+    <div className="absolute top-[45vh] left-[12vw] rotate-[8deg] transition-transform hover:scale-110 duration-500">
+      <img src="/img5.png" className="w-[11vw] min-w-[110px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    </div>
+
+    {/* Art6 */}
+    <div className="absolute top-[55vh] right-[12vw] rotate-[-12deg] transition-transform hover:scale-110 duration-500">
+      <img src="/img6.png" className="w-[13vw] min-w-[130px] max-w-[240px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    </div>
+
+    {/* Art7 */}
+    <div className="absolute top-[5vh] left-[40vw] rotate-[6deg] transition-transform hover:scale-110 duration-500">
+      <img src="/img7.png" className="w-[10vw] min-w-[100px] max-w-[180px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    </div>
+
+    {/* Art8 */}
+    <div className="absolute bottom-[5vh] left-[45vw] rotate-[-6deg] transition-transform hover:scale-110 duration-500">
+      <img src="/img8.png" className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    </div>
+
   </div>
-
-  {/* Hope Serin - Inferior Esquerda */}
-  <div className="absolute bottom-[15vh] left-[8vw] rotate-[-5deg] transition-transform hover:scale-110 duration-500 pointer-events-auto">
-    <img 
-      src={hopeSerin} 
-      className="w-[16vw] min-w-[160px] max-w-[300px] drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" 
-      alt="Arte Hope Serin" 
-    />
-  </div>
-
-  {/* Outra Arte - Inferior Direita */}
-  <div className="absolute bottom-[8vh] right-[5vw] rotate-[15deg] transition-transform hover:scale-110 duration-500 pointer-events-auto">
-    <img 
-      src="/art4.png" 
-      className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" 
-      alt="Arte 4" 
-    />
-  </div>
-
-</div>
-  </section>
 </ParallaxLayer>
 {/* 📌 REGISTRO SECTION (Layer 2) */}
 <ParallaxLayer offset={2} speed={0.3}>
