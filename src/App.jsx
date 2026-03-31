@@ -146,7 +146,40 @@ onClick={() => {
     </h2>
   </div>
 </ParallaxLayer>
+{/* ✨ ESTRELAS GLOBAIS (camada mais rápida) */}
+<ParallaxLayer offset={0} speed={1.2} factor={3.5}>
+  <div className="absolute inset-0 pointer-events-none z-50">
 
+    {/* ⭐ BRILHANTES (principais) */}
+    <div className="absolute top-[5vh] left-[10vw] w-2 h-2 bg-white rotate-45 
+    shadow-[0_0_10px_rgba(255,255,255,1),0_0_25px_rgba(255,255,255,0.7)]" />
+
+    <div className="absolute top-[15vh] right-[15vw] w-2 h-2 bg-white rotate-45 
+    shadow-[0_0_8px_rgba(255,255,255,0.9),0_0_20px_rgba(255,255,255,0.6)]" />
+
+    <div className="absolute bottom-[20vh] left-[20vw] w-3 h-3 bg-white rotate-45 
+    shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.7)]" />
+
+
+    {/* 🌌 MÉDIAS */}
+    <div className="absolute top-[30vh] left-[40vw] w-2 h-2 bg-purple-300/40 rotate-45 blur-[1px]" />
+    <div className="absolute top-[50vh] right-[30vw] w-3 h-3 bg-blue-300/30 rotate-45 blur-[1px]" />
+    <div className="absolute bottom-[10vh] right-[10vw] w-2 h-2 bg-purple-200/40 rotate-45 blur-[1px]" />
+
+
+    {/* ✨ PEQUENAS (profundidade) */}
+    <div className="absolute top-[10vh] left-[60vw] w-1 h-1 bg-white/40 rotate-45 blur-[1px]" />
+    <div className="absolute top-[70vh] left-[30vw] w-1 h-1 bg-white/30 rotate-45 blur-[1px]" />
+    <div className="absolute bottom-[5vh] left-[50vw] w-1 h-1 bg-white/30 rotate-45 blur-[1px]" />
+
+    
+    {/* 💥 EXTRAS (espalhados pra invadir tudo) */}
+    <div className="absolute top-[25vh] left-[5vw] w-2 h-2 bg-white/50 rotate-45 blur-[1px]" />
+    <div className="absolute top-[60vh] right-[5vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
+    <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
+
+  </div>
+</ParallaxLayer>
 
 {/* 🖼️ IMAGENS (rápidas = frente) */}
 <ParallaxLayer offset={1} speed={0.6}>
