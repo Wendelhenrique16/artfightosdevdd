@@ -88,7 +88,7 @@ function App() {
           <div className="absolute bottom-40 right-[30%] w-24 h-24 bg-white/10 rotate-45" />
         </div>
 
-        {/* FRENTE (SUAS ARTES) */}
+        {/* FRENTE  */}
         <div className="front-layer absolute inset-0">
 
           <div className="absolute top-20 left-10 rotate-[-10deg]">
