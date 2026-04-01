@@ -7,9 +7,10 @@ import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 function App() {
   const [personagens, setPersonagens] = useState(1);
   const [finalizacao, setFinalizacao] = useState(1);
+  const [cenario, setCenario] = useState(1);
   const [tamanho, setTamanho] = useState(1);
   const parallaxRef = useRef(null);
-  const total = personagens * finalizacao * tamanho;
+  const total = personagens * ((finalizacao * tamanho) + cenario);
 
   // Definição de estilos para facilitar o reuso
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
@@ -284,24 +285,40 @@ onClick={() => {
           <div className="space-y-1 text-center">
             <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Cenário</label>
             <select
-              value={finalizacao}
-              onChange={(e) => setFinalizacao(Number(e.target.value))}
+              value={cenario}
+              onChange={(e) => setCenario(Number(e.target.value))}
               className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-900 outline-none cursor-pointer"
             >
-              <option value={10}>Fundo Simples (+10)</option>
-              <option value={50}>Cenário Completo (+50)</option>
+              <option value={0}>Fundo Branco (+0)</option>
+              <option value={1}>Fundo Colorido (+1)</option>
+              <option value={2}>Cenário Simples (+2)</option>
+              <option value={3}>Cenário Completo (+3)</option>
             </select>
           </div>
 
           <div className="space-y-1 text-center">
             <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Pintura</label>
             <select
+              value={finalizacao}
+              onChange={(e) => setFinalizacao(Number(e.target.value))}
+              className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none cursor-pointer"
+            >
+              <option value={1}>Rascunho (+1)</option>
+              <option value={2}>Colorido (+2)</option>
+              <option value={3}>Completo (+3)</option>
+              <option value={4}>Renderizado (+4)</option>
+            </select>
+          </div>
+                    <div className="space-y-1 text-center">
+            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Pintura</label>
+            <select
               value={tamanho}
               onChange={(e) => setTamanho(Number(e.target.value))}
               className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none cursor-pointer"
             >
-              <option value={1}>Flat Color (x1)</option>
-              <option value={2}>Renderizado (x2)</option>
+              <option value={1}>Icon (+1)</option>
+              <option value={2}>Meio Corpo (+2)</option>
+              <option value={3}>Completo (+3)</option>
             </select>
           </div>
         </div>
