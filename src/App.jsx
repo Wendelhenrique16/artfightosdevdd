@@ -191,12 +191,13 @@ onClick={() => {
     <div className="absolute top-[10vh] left-[5vw] rotate-[-10deg] transition-transform hover:scale-110 duration-500">
       <img src={gilmara} className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
+        <div className="absolute bottom-[10vh] left-[30vw] w-3 h-3 bg-white rotate-45 
+    shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.7)]" />
 
     {/* Ocnalb */}
     <div className="absolute top-[20vh] right-[5vw] rotate-[10deg] transition-transform hover:scale-110 duration-500">
       <img src={ocnalb} className="w-[14vw] min-w-[140px] max-w-[260px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
-
     {/* Hope */}
     <div className="absolute bottom-[15vh] left-[8vw] rotate-[-5deg] transition-transform hover:scale-110 duration-500">
       <img src={hopeSerin} className="w-[16vw] min-w-[160px] max-w-[300px] drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" />
