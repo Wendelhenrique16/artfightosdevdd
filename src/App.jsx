@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import gilmara from "./assets/images/gilmara.png";
 import ocnalb from "./assets/images/ocnalb.png";  
 import hopeSerin from "./assets/images/hopeSerin.png";
+import hector from "./assets/images/hector.png";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 
 function App() {
@@ -203,7 +204,7 @@ onClick={() => {
 
     {/* Art4 */}
     <div className="absolute bottom-[8vh] right-[5vw] rotate-[15deg] transition-transform hover:scale-110 duration-500">
-      <img src="/art4.png" className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+      <img src={hector} className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
 
     {/* Art5 */}
