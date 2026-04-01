@@ -275,12 +275,27 @@ onClick={() => {
 
         <div className="w-full space-y-4 mt-4">
           <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter">Quem está sendo atacado?</label>
+            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
             <input
-              placeholder="NOME DO PERSONAGEM"
+              placeholder="NOME DO ATACADO"
               className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
             />
           </div>
+          <div className="space-y-1 text-center">
+  <label
+    className="text-[9px] uppercase text-gray-500 tracking-tighter"
+    style={bebasStyle}
+  >
+    Nº de Personagens
+  </label>
+  <input
+    type="number"
+    min={1}
+    value={personagens}
+    onChange={(e) => setPersonagens(Number(e.target.value))}
+    className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all"
+  />
+</div>
 
           <div className="space-y-1 text-center">
             <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Cenário</label>
