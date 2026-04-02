@@ -418,6 +418,7 @@ onClick={() => {
 
     {/* BOTÃO ENVIAR  */}
     <button 
+    onClick={handleSubmit}
       className="mt-10 mb-20 bg-[#8b7df0] hover:bg-[#7a6ce0] text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] active:scale-95"
       style={bebasStyle}
     >
