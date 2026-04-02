@@ -13,35 +13,65 @@ function App() {
   const [cenario, setCenario] = useState(1);
   const [tamanho, setTamanho] = useState(1);
   const parallaxRef = useRef(null);
-  const [todos, setTodos] = useState([]);
-  const [todosLoading, setTodosLoading] = useState(false);
-  const [todosError, setTodosError] = useState(null);
   const total = personagens * ((finalizacao * tamanho) + cenario);
+  const [file, setFile] = useState(null);
 
-  useEffect(() => {
-    async function getTodos() {
-      setTodosLoading(true);
-      setTodosError(null);
-
-      const { data, error } = await supabase.from("todos").select("*");
-
-      if (error) {
-        setTodosError(error.message);
-      } else if (data) {
-        setTodos(data);
-      }
-
-      setTodosLoading(false);
-    }
-
-    getTodos();
-  }, []);
+ 
 
   // Definição de estilos para facilitar o reuso
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
+async function handleSubmit() {
+  if (!file) {
+    alert("Envia uma imagem primeiro");
+    return;
+  }
 
+  try {
+    // nome único
+    const fileName = `${Date.now()}-${file.name}`;
+
+    // upload
+    const { error: uploadError } = await supabase.storage
+      .from("artworks")
+      .upload(fileName, file);
+
+    if (uploadError) throw uploadError;
+
+    // pegar URL
+    const { data } = supabase.storage
+      .from("artworks")
+      .getPublicUrl(fileName);
+
+    const imageUrl = data.publicUrl;
+
+    // salvar no banco
+    const { error: insertError } = await supabase
+      .from("attacks")
+      .insert([
+        {
+          imagem_url: imageUrl,
+          atacante: "anonimo", // depois liga com auth
+          atacado: "nome aqui depois", // pega do input
+          personagens,
+          cenario,
+          finalizacao,
+          tamanho,
+          pontos: total,
+          fogo_amigo: false
+        }
+      ]);
+
+    if (insertError) throw insertError;
+
+    alert("Ataque enviado com sucesso 😎");
+
+  } catch (err) {
+    console.error(err);
+    alert("Erro ao enviar ataque");
+  }
+}
   return (
     <Parallax pages={3.2} ref={parallaxRef}>
       
@@ -282,12 +312,31 @@ onClick={() => {
     <div className="flex flex-col md:flex-row gap-6 bg-[#181825]/90 backdrop-blur-sm p-8 rounded-3xl border border-[#2a2a3a] shadow-[0_0_50px_rgba(0,0,0,0.6)] max-w-5xl w-full">
       
       {/* ÁREA DE UPLOAD */}
-      <div className="flex-[1.5] bg-[#11111d] rounded-2xl border-2 border-dashed border-[#2a2a40] flex flex-col items-center justify-center p-8 cursor-pointer hover:border-purple-500/50 transition-colors group">
-        <span className="text-[10px] text-gray-400 mb-6 tracking-widest uppercase opacity-60 group-hover:opacity-100" style={bebasStyle}>
-          [ ARRASTE OU CLIQUE AQUI PARA ENVIAR SUA ARTE ]
-        </span>
-        <img src={hopeSerin} className="w-56 drop-shadow-2xl transition-transform group-hover:scale-105" alt="Preview" />
-      </div>
+      <div 
+  className="flex-[1.5] bg-[#11111d] rounded-2xl border-2 border-dashed border-[#2a2a40] flex flex-col items-center justify-center p-8 cursor-pointer hover:border-purple-500/50 transition-colors group"
+  onClick={() => document.getElementById("fileInput").click()}
+>
+  <input
+    id="fileInput"
+    type="file"
+    accept="image/*"
+    className="hidden"
+    onChange={(e) => setFile(e.target.files[0])}
+  />
+
+  <span className="text-[10px] text-gray-400 mb-6 tracking-widest uppercase opacity-60 group-hover:opacity-100" style={bebasStyle}>
+    [ ARRASTE OU CLIQUE AQUI PARA ENVIAR SUA ARTE ]
+  </span>
+
+  {file ? (
+    <img
+      src={URL.createObjectURL(file)}
+      className="w-56 drop-shadow-2xl"
+    />
+  ) : (
+    <img src={hopeSerin} className="w-56 drop-shadow-2xl" />
+  )}
+</div>
 
       {/* PAINEL DE PONTOS */}
       <div className="flex-1 flex flex-col items-center justify-between py-2">
@@ -366,23 +415,6 @@ onClick={() => {
       </div>
     </div>
 
-    {/* SUPABASE TODO LIST */}
-    <section className="w-full max-w-4xl bg-[#11111d]/80 px-5 py-4 rounded-2xl border border-[#2a2a3a] mb-6">
-      <h2 className="text-white text-2xl mb-3" style={bebasStyle}>Todos from Supabase</h2>
-      {todosLoading ? (
-        <p className="text-gray-300">Loading todos...</p>
-      ) : todosError ? (
-        <p className="text-red-400">Error: {todosError}</p>
-      ) : todos.length === 0 ? (
-        <p className="text-gray-300">No todos found.</p>
-      ) : (
-        <ul className="list-disc list-inside text-gray-100">
-          {todos.map((todo) => (
-            <li key={todo.id} className="mb-1">{todo.name ?? `#${todo.id}`}</li>
-          ))}
-        </ul>
-      )}
-    </section>
 
     {/* BOTÃO ENVIAR  */}
     <button 
