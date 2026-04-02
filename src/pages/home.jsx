@@ -6,6 +6,7 @@ import hopeSerin from "../assets/images/hopeSerin.png";
 import hector from "../assets/images/hector.png";
 import chester from "../assets/images/chester.png";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [personagens, setPersonagens] = useState(1);
@@ -16,7 +17,7 @@ function App() {
   const total = personagens * ((finalizacao * tamanho) + cenario);
   const [file, setFile] = useState(null);
   const [atacado, setAtacado] = useState("");
-
+  const navigate = useNavigate();
  
 
   // Definição de estilos para facilitar o reuso
@@ -128,6 +129,7 @@ onClick={() => {
             </button>
 
             <button
+              onClick={() => navigate("/galeria")}
               className="bg-[#201E27] hover:bg-[#2a2833] border border-white/25 w-63.75 h-12 text-[24px] rounded-xl text-white transition-all"
               style={bebasStyle}
             >
