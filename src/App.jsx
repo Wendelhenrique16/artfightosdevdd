@@ -3,6 +3,7 @@ import gilmara from "./assets/images/gilmara.png";
 import ocnalb from "./assets/images/ocnalb.png";  
 import hopeSerin from "./assets/images/hopeSerin.png";
 import hector from "./assets/images/hector.png";
+import chester from "./assets/images/chester.png";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 
 function App() {
@@ -203,14 +204,14 @@ onClick={() => {
       <img src={hopeSerin} className="w-[16vw] min-w-[160px] max-w-[300px] drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" />
     </div>
 
-    {/* Art4 */}
+    {/* Hector */}
     <div className="absolute bottom-[8vh] right-[5vw] rotate-[15deg] transition-transform hover:scale-110 duration-500">
       <img src={hector} className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
 
-    {/* Art5 */}
+    {/* Chester */}
     <div className="absolute top-[45vh] left-[12vw] rotate-[8deg] transition-transform hover:scale-110 duration-500">
-      <img src="/img5.png" className="w-[11vw] min-w-[110px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+      <img src={chester} className="w-[11vw] min-w-[110px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
 
     {/* Art6 */}
