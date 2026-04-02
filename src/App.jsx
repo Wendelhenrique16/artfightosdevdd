@@ -69,7 +69,8 @@ async function handleSubmit() {
 
   } catch (err) {
     console.error(err);
-    alert("Erro ao enviar ataque");
+    alert(err.message);
+console.error(err);
   }
 }
   return (
