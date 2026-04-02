@@ -15,6 +15,7 @@ function App() {
   const parallaxRef = useRef(null);
   const total = personagens * ((finalizacao * tamanho) + cenario);
   const [file, setFile] = useState(null);
+  const [atacado, setAtacado] = useState("");
 
  
 
@@ -48,12 +49,12 @@ async function handleSubmit() {
 
     // salvar no banco
     const { error: insertError } = await supabase
-      .from("attacks")
+      .from("ataques")
       .insert([
         {
           imagem_url: imageUrl,
           atacante: "anonimo", // depois liga com auth
-          atacado: "nome aqui depois", // pega do input
+          atacado: atacado,
           personagens,
           cenario,
           finalizacao,
@@ -353,6 +354,8 @@ onClick={() => {
           <div className="space-y-1 text-center">
             <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
             <input
+              value={atacado}
+              onChange={(e) => setAtacado(e.target.value)}
               placeholder="NOME DO ATACADO"
               className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
             />
