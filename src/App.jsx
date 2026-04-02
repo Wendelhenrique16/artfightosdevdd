@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { supabase } from "./utils/supabase";
 import gilmara from "./assets/images/gilmara.png";
 import ocnalb from "./assets/images/ocnalb.png";  
 import hopeSerin from "./assets/images/hopeSerin.png";
@@ -12,7 +13,29 @@ function App() {
   const [cenario, setCenario] = useState(1);
   const [tamanho, setTamanho] = useState(1);
   const parallaxRef = useRef(null);
+  const [todos, setTodos] = useState([]);
+  const [todosLoading, setTodosLoading] = useState(false);
+  const [todosError, setTodosError] = useState(null);
   const total = personagens * ((finalizacao * tamanho) + cenario);
+
+  useEffect(() => {
+    async function getTodos() {
+      setTodosLoading(true);
+      setTodosError(null);
+
+      const { data, error } = await supabase.from("todos").select("*");
+
+      if (error) {
+        setTodosError(error.message);
+      } else if (data) {
+        setTodos(data);
+      }
+
+      setTodosLoading(false);
+    }
+
+    getTodos();
+  }, []);
 
   // Definição de estilos para facilitar o reuso
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
@@ -342,6 +365,24 @@ onClick={() => {
         </div>
       </div>
     </div>
+
+    {/* SUPABASE TODO LIST */}
+    <section className="w-full max-w-4xl bg-[#11111d]/80 px-5 py-4 rounded-2xl border border-[#2a2a3a] mb-6">
+      <h2 className="text-white text-2xl mb-3" style={bebasStyle}>Todos from Supabase</h2>
+      {todosLoading ? (
+        <p className="text-gray-300">Loading todos...</p>
+      ) : todosError ? (
+        <p className="text-red-400">Error: {todosError}</p>
+      ) : todos.length === 0 ? (
+        <p className="text-gray-300">No todos found.</p>
+      ) : (
+        <ul className="list-disc list-inside text-gray-100">
+          {todos.map((todo) => (
+            <li key={todo.id} className="mb-1">{todo.name ?? `#${todo.id}`}</li>
+          ))}
+        </ul>
+      )}
+    </section>
 
     {/* BOTÃO ENVIAR  */}
     <button 
