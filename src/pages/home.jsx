@@ -235,7 +235,7 @@ onClick={() => {
     <div className="absolute top-[25vh] left-[5vw] w-2 h-2 bg-white/50 rotate-45 blur-[1px]" />
     <div className="absolute top-[60vh] right-[5vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
         {/* Chester */}
-    <div className="absolute top-[225vh] left-[40vw] rotate-8 transition-transform hover:scale-110 duration-500">
+    <div className="absolute top-[256vh] left-[32vw] rotate-350 transition-transform hover:scale-110 duration-500">
       <img src={chester} className="w-[11vw] min-w-27.5 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
     <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
@@ -267,7 +267,6 @@ onClick={() => {
     <div className="absolute bottom-[8vh] right-[5vw] rotate-15 transition-transform hover:scale-110 duration-500">
       <img src={hector} className="w-[10vw] min-w-25 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
-
 
 
     {/* Art6 */}
