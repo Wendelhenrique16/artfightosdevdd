@@ -45,7 +45,7 @@ function App() {
             <button
 onClick={() => {
   const startTime = performance.now();
-  const duration = 5000; // pode até aumentar
+  const duration = 5000; // pode aumentar
 
   const start = parallaxRef.current.current;
   const end = 2;
@@ -117,7 +117,7 @@ onClick={() => {
 
     {/* 🖼️ IMAGENS DISTANTES (bem sutis) */}
     <img 
-      src="/bg1.png"
+      src={chester}
       className="absolute top-[10vh] left-[20vw] 
       w-[30vw] opacity-10 blur-sm"
     />
@@ -236,7 +236,7 @@ onClick={() => {
   {/* Container principal com padding no topo para respirar */}
   <section id="registro" className="relative flex flex-col items-center justify-start min-h-screen pt-12 pb-24 px-4 overflow-visible">
     
-    {/* --- SEUS LOSANGOS DE VOLTA AQUI --- */}
+    {/* --- LOSANGOS  --- */}
     <div className="absolute inset-0 pointer-events-none -z-10">
       {/* Losangos de Fundo Esfumaçados */}
       <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
@@ -247,7 +247,7 @@ onClick={() => {
       <div className="absolute bottom-40 right-[25%] w-24 h-24 bg-white/5 rotate-45" />
     </div>
 
-    {/* TÍTULO (Ajustado para 72px para caber melhor) */}
+    {/* TÍTULO */}
     <h1 
       className="text-[72px] text-[#EAEAF0] mb-8 text-center leading-tight drop-shadow-lg" 
       style={bebasStyle}
@@ -343,7 +343,7 @@ onClick={() => {
       </div>
     </div>
 
-    {/* BOTÃO ENVIAR (Com margem inferior para garantir o scroll) */}
+    {/* BOTÃO ENVIAR  */}
     <button 
       className="mt-10 mb-20 bg-[#8b7df0] hover:bg-[#7a6ce0] text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] active:scale-95"
       style={bebasStyle}
