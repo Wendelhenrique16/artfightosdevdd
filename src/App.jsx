@@ -210,7 +210,7 @@ onClick={() => {
     </div>
 
     {/* Chester */}
-    <div className="absolute top-[45vh] left-[12vw] rotate-[8deg] transition-transform hover:scale-110 duration-500">
+    <div className="absolute top-[55vh] left-[40vw] rotate-[8deg] transition-transform hover:scale-110 duration-500">
       <img src={chester} className="w-[11vw] min-w-[110px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
 
