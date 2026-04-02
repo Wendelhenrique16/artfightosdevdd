@@ -90,7 +90,7 @@ console.error(err);
           </h1>
 
           <p 
-            className="text-[24px] text-gray-400 mb-[21px] max-w-2xl"
+            className="text-[24px] text-gray-400 mb-5.25 max-w-2xl"
             style={crimsonStyle}
           >
             Onde os de verdade se reunem para desenhar os personagens uns dos outros.
@@ -121,14 +121,14 @@ onClick={() => {
 
   requestAnimationFrame(animate);
 }}
-              className="bg-[#444444] hover:bg-[#555555] w-[196px] h-[48px] text-[24px] rounded-[12px] text-white transition-all"
+              className="bg-[#444444] hover:bg-[#555555] w-49 h-12 text-[24px] rounded-xl text-white transition-all"
               style={bebasStyle}
             >
               Registrar Ataque
             </button>
 
             <button
-              className="bg-[#201E27] hover:bg-[#2a2833] border border-white/25 w-[255px] h-[48px] text-[24px] rounded-[12px] text-white transition-all"
+              className="bg-[#201E27] hover:bg-[#2a2833] border border-white/25 w-63.75 h-12 text-[24px] rounded-xl text-white transition-all"
               style={bebasStyle}
             >
               Visualizar últimos ataques
@@ -234,6 +234,10 @@ onClick={() => {
     {/* 💥 EXTRAS (espalhados pra invadir tudo) */}
     <div className="absolute top-[25vh] left-[5vw] w-2 h-2 bg-white/50 rotate-45 blur-[1px]" />
     <div className="absolute top-[60vh] right-[5vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
+        {/* Chester */}
+    <div className="absolute top-[225vh] left-[40vw] rotate-8 transition-transform hover:scale-110 duration-500">
+      <img src={chester} className="w-[11vw] min-w-27.5 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    </div>
     <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
 
   </div>
@@ -244,44 +248,41 @@ onClick={() => {
   <div className="absolute inset-0">
 
     {/* Gilmara */}
-    <div className="absolute top-[10vh] left-[5vw] rotate-[-10deg] transition-transform hover:scale-110 duration-500">
-      <img src={gilmara} className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    <div className="absolute top-[10vh] left-[5vw] rotate-10 transition-transform hover:scale-110 duration-500">
+      <img src={gilmara} className="w-[12vw] min-w-30 max-w-55 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
         <div className="absolute bottom-[10vh] left-[30vw] w-3 h-3 bg-white rotate-45 
     shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.7)]" />
 
     {/* Ocnalb */}
-    <div className="absolute top-[20vh] right-[5vw] rotate-[10deg] transition-transform hover:scale-110 duration-500">
-      <img src={ocnalb} className="w-[14vw] min-w-[140px] max-w-[260px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    <div className="absolute top-[20vh] right-[5vw] rotate-10 transition-transform hover:scale-110 duration-500">
+      <img src={ocnalb} className="w-[14vw] min-w-35 max-w-65 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
     {/* Hope */}
-    <div className="absolute bottom-[15vh] left-[8vw] rotate-[-5deg] transition-transform hover:scale-110 duration-500">
-      <img src={hopeSerin} className="w-[16vw] min-w-[160px] max-w-[300px] drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" />
+    <div className="absolute bottom-[15vh] left-[8vw] rotate-5 transition-transform hover:scale-110 duration-500">
+      <img src={hopeSerin} className="w-[16vw] min-w-40 max-w-75 drop-shadow-[0_0_25px_rgba(0,0,0,0.8)] select-none" />
     </div>
 
     {/* Hector */}
-    <div className="absolute bottom-[8vh] right-[5vw] rotate-[15deg] transition-transform hover:scale-110 duration-500">
-      <img src={hector} className="w-[10vw] min-w-[100px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+    <div className="absolute bottom-[8vh] right-[5vw] rotate-15 transition-transform hover:scale-110 duration-500">
+      <img src={hector} className="w-[10vw] min-w-25 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
     </div>
 
-    {/* Chester */}
-    <div className="absolute top-[55vh] left-[40vw] rotate-[8deg] transition-transform hover:scale-110 duration-500">
-      <img src={chester} className="w-[11vw] min-w-[110px] max-w-[200px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
-    </div>
+
 
     {/* Art6 */}
-    <div className="absolute top-[55vh] right-[12vw] rotate-[-12deg] transition-transform hover:scale-110 duration-500">
-      <img src="/img6.png" className="w-[13vw] min-w-[130px] max-w-[240px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    <div className="absolute top-[55vh] right-[12vw] rotate-12 transition-transform hover:scale-110 duration-500">
+      <img src="/img6.png" className="w-[13vw] min-w-32.5 max-w-60 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
 
     {/* Art7 */}
-    <div className="absolute top-[5vh] left-[40vw] rotate-[6deg] transition-transform hover:scale-110 duration-500">
-      <img src="/img7.png" className="w-[10vw] min-w-[100px] max-w-[180px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    <div className="absolute top-[5vh] left-[40vw] rotate-6 transition-transform hover:scale-110 duration-500">
+      <img src="/img7.png" className="w-[10vw] min-w-25 max-w-45 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
 
     {/* Art8 */}
-    <div className="absolute bottom-[5vh] left-[45vw] rotate-[-6deg] transition-transform hover:scale-110 duration-500">
-      <img src="/img8.png" className="w-[12vw] min-w-[120px] max-w-[220px] drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+    <div className="absolute bottom-[5vh] left-[45vw] rotate-6 transition-transform hover:scale-110 duration-500">
+      <img src="/img8.png" className="w-[12vw] min-w-30 max-w-55 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
 
   </div>
