@@ -7,6 +7,7 @@ import hector from "../assets/images/hector.png";
 import chester from "../assets/images/chester.png";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { useNavigate } from "react-router-dom";
+import siena from "../assets/images/siena.png";
 
 function App() {
   const [personagens, setPersonagens] = useState(1);
@@ -176,7 +177,7 @@ onClick={() => {
     <img 
       src={chester}
       className="absolute top-[10vh] left-[20vw] 
-      w-[30vw] opacity-10 blur-sm"
+      w-[30vw] opacity-20 blur-sm"
     />
 
     <img 
@@ -236,9 +237,10 @@ onClick={() => {
     {/* 💥 EXTRAS (espalhados pra invadir tudo) */}
     <div className="absolute top-[25vh] left-[5vw] w-2 h-2 bg-white/50 rotate-45 blur-[1px]" />
     <div className="absolute top-[60vh] right-[5vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
-        {/* Chester */}
-    <div className="absolute top-[256vh] left-[32vw] rotate-350 transition-transform hover:scale-110 duration-500">
-      <img src={chester} className="w-[11vw] min-w-27.5 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+
+        {/* Siena */}
+    <div className="absolute top-[275vh] right-[12vw] rotate-12 transition-transform hover:scale-110 duration-500">
+      <img src={siena} className="w-[13vw] min-w-60 max-w-120 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
     </div>
     <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
 
@@ -271,10 +273,6 @@ onClick={() => {
     </div>
 
 
-    {/* Art6 */}
-    <div className="absolute top-[55vh] right-[12vw] rotate-12 transition-transform hover:scale-110 duration-500">
-      <img src="/img6.png" className="w-[13vw] min-w-32.5 max-w-60 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
-    </div>
 
     {/* Art7 */}
     <div className="absolute top-[5vh] left-[40vw] rotate-6 transition-transform hover:scale-110 duration-500">
@@ -393,7 +391,7 @@ onClick={() => {
           </div>
 
           <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Pintura</label>
+            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Finalização</label>
             <select
               value={finalizacao}
               onChange={(e) => setFinalizacao(Number(e.target.value))}
@@ -406,7 +404,7 @@ onClick={() => {
             </select>
           </div>
                     <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Pintura</label>
+            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Tamanho</label>
             <select
               value={tamanho}
               onChange={(e) => setTamanho(Number(e.target.value))}
