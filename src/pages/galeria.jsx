@@ -26,6 +26,20 @@ useEffect(() => {
 
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
+const ranking = Object.values(
+  ataques.reduce((acc, atk) => {
+    if (!acc[atk.atacante]) {
+      acc[atk.atacante] = {
+        atacante: atk.atacante,
+        pontos: 0,
+      };
+    }
+
+    acc[atk.atacante].pontos += atk.pontos;
+
+    return acc;
+  }, {})
+).sort((a, b) => b.pontos - a.pontos);
 
   return (
     <div className="min-h-screen bg-[#0a0a0c] text-white p-8">
@@ -117,17 +131,32 @@ useEffect(() => {
                   <th className="pb-4">Posição</th>
                   <th className="pb-4">Artistas</th>
                   <th className="pb-4">Pontos</th>
+                  <th className="pb-4">Time</th>
                 </tr>
               </thead>
-              <tbody className="text-gray-300">
-                {[1, 2, 3].map((pos) => (
-                  <tr key={pos} className="border-b border-white/5 last:border-0">
-                    <td className="py-4 font-bold">{pos}</td>
-                    <td className="py-4 text-gray-400">Artista{pos}</td>
-                    <td className="py-4 font-mono">455</td>
-                  </tr>
-                ))}
-              </tbody>
+<tbody className="text-gray-300">
+  {ranking.slice(0, 10).map((player, index) => (
+    <tr
+      key={player.atacante}
+      className="border-b border-white/5 last:border-0"
+    >
+      <td className="py-4 font-bold">{index + 1}</td>
+
+      <td className="py-4 text-gray-400">
+        {player.atacante || "Anônimo"}
+      </td>
+
+      <td className="py-4 font-mono">
+        {player.pontos}
+      </td>
+      <td className={`py-4 font-bold ${
+  player.time === "ODV" ? "text-purple-400" : "text-red-400"
+}`}>
+  {player.time || "??"}
+</td>
+    </tr>
+  ))}
+</tbody>
             </table>
           </div>
 
@@ -135,9 +164,11 @@ useEffect(() => {
           <div className="bg-[#181825] border border-white/5 p-6 rounded-3xl w-full">
             <h3 className="text-center text-gray-400 text-[10px] tracking-widest uppercase mb-4">Últimos Pontos Registrados</h3>
             <div className="space-y-2 font-mono text-[10px] text-gray-500 text-center">
-              {[...Array(6)].map((_, i) => (
-                <p key={i}>[ @artista1: SELECIONAR + ] → +2 pontos</p>
-              ))}
+{ataques.slice(0, 6).map((atk) => (
+<p key={atk.id}>
+  [{atk.time}] @{atk.atacante} → @{atk.atacado} → +{atk.pontos} pts
+</p>
+))}
             </div>
           </div>
         </section>

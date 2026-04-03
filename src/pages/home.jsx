@@ -28,6 +28,8 @@ function App() {
   const [file, setFile] = useState(null);
   const [atacado, setAtacado] = useState("");
   const navigate = useNavigate();
+  const fakeTimes = ["ODV", "RIVAL"];
+const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
 
 
@@ -72,7 +74,8 @@ function App() {
             finalizacao,
             tamanho,
             pontos: total,
-            fogo_amigo: false
+            fogo_amigo: false,
+            time: time,
           }
         ]);
 
