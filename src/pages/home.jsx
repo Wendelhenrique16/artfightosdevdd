@@ -10,15 +10,25 @@ import { useNavigate } from "react-router-dom";
 import siena from "../assets/images/siena.png";
 
 function App() {
+  const [fogoAmigoQtd, setFogoAmigoQtd] = useState(0);
   const [personagens, setPersonagens] = useState(1);
   const [finalizacao, setFinalizacao] = useState(1);
+  const [doodles, setDoodles] = useState(0);
   const [cenario, setCenario] = useState(1);
   const [tamanho, setTamanho] = useState(1);
   const parallaxRef = useRef(null);
-  const total = personagens * ((finalizacao * tamanho) + cenario);
+  const base = (finalizacao * tamanho) + cenario;
+
+const personagensNormais = personagens - fogoAmigoQtd;
+
+const total =
+  (personagensNormais * base) +
+  (fogoAmigoQtd * (base / 2)) +
+  doodles;
   const [file, setFile] = useState(null);
   const [atacado, setAtacado] = useState("");
   const navigate = useNavigate();
+
  
 
   // Definição de estilos para facilitar o reuso
@@ -352,7 +362,7 @@ onClick={() => {
 
         <div className="w-full space-y-4 mt-4">
           <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
+            <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
             <input
               value={atacado}
               onChange={(e) => setAtacado(e.target.value)}
@@ -362,10 +372,10 @@ onClick={() => {
           </div>
           <div className="space-y-1 text-center">
   <label
-    className="text-[9px] uppercase text-gray-500 tracking-tighter"
+    className="text-[16px] uppercase text-gray-500 tracking-tighter"
     style={bebasStyle}
   >
-    Nº de Personagens
+    Nº de Personagens (total)
   </label>
   <input
     type="number"
@@ -377,7 +387,7 @@ onClick={() => {
 </div>
 
           <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Cenário</label>
+            <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Cenário</label>
             <select
               value={cenario}
               onChange={(e) => setCenario(Number(e.target.value))}
@@ -391,7 +401,7 @@ onClick={() => {
           </div>
 
           <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Finalização</label>
+            <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Finalização</label>
             <select
               value={finalizacao}
               onChange={(e) => setFinalizacao(Number(e.target.value))}
@@ -404,7 +414,7 @@ onClick={() => {
             </select>
           </div>
                     <div className="space-y-1 text-center">
-            <label className="text-[9px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Tamanho</label>
+            <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Tamanho</label>
             <select
               value={tamanho}
               onChange={(e) => setTamanho(Number(e.target.value))}
@@ -412,8 +422,49 @@ onClick={() => {
             >
               <option value={1}>Icon (+1)</option>
               <option value={2}>Meio Corpo (+2)</option>
+              <option value={2}>Chibi (+2)</option>
               <option value={3}>Completo (+3)</option>
             </select>
+            <div className="space-y-1 text-center">
+  <label
+    className="text-[16px] uppercase text-gray-500 tracking-tighter"
+    style={bebasStyle}
+  >
+    Personagens que são fogo amigo
+  </label>
+  <input
+    type="number"
+    min={0}
+    max={personagens}
+    value={fogoAmigoQtd}
+    onChange={(e) => {
+  const value = Number(e.target.value);
+  if (value <= personagens) {
+    setFogoAmigoQtd(value);
+  }
+}}
+    className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all"
+  />
+</div>
+<div className="space-y-1 text-center">
+  <label
+    className="text-[16px] uppercase text-gray-500 tracking-tighter"
+    style={bebasStyle}
+  >
+    Doodles (+1 cada)
+  </label>
+
+  <input
+    type="number"
+    min={0}
+    value={doodles}
+    onChange={(e) => {
+      const value = Math.max(0, Number(e.target.value));
+      setDoodles(value);
+    }}
+    className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all"
+  />
+</div>
           </div>
         </div>
       </div>
