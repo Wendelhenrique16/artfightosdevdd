@@ -17,6 +17,7 @@ function App() {
   const [cenario, setCenario] = useState(1);
   const [tamanho, setTamanho] = useState(1);
   const parallaxRef = useRef(null);
+  const [loading, setLoading] = useState(false);
   const base = (finalizacao * tamanho) + cenario;
 
   const personagensNormais = personagens - fogoAmigoQtd;
@@ -37,58 +38,57 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
-  async function handleSubmit() {
-    if (!file) {
-      alert("Envia uma imagem primeiro");
-      return;
-    }
-
-    try {
-      // nome único
-      const fileName = `${Date.now()}-${file.name}`;
-
-      // upload
-      const { error: uploadError } = await supabase.storage
-        .from("artworks")
-        .upload(fileName, file);
-
-      if (uploadError) throw uploadError;
-
-      // pegar URL
-      const { data } = supabase.storage
-        .from("artworks")
-        .getPublicUrl(fileName);
-
-      const imageUrl = data.publicUrl;
-
-      // salvar no banco
-      const { error: insertError } = await supabase
-        .from("ataques")
-        .insert([
-          {
-            imagem_url: imageUrl,
-            atacante: "anonimo", // depois liga com auth
-            atacado: atacado,
-            personagens,
-            cenario,
-            finalizacao,
-            tamanho,
-            pontos: total,
-            fogo_amigo: false,
-            time: time,
-          }
-        ]);
-
-      if (insertError) throw insertError;
-
-      alert("Ataque enviado com sucesso 😎");
-
-    } catch (err) {
-      console.error(err);
-      alert(err.message);
-      console.error(err);
-    }
+ async function handleSubmit() {
+  if (!file) {
+    alert("Envia uma imagem primeiro");
+    return;
   }
+
+  setLoading(true); // 🔥 ADICIONA AQUI
+
+  try {
+    const fileName = `${Date.now()}-${file.name}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("artworks")
+      .upload(fileName, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from("artworks")
+      .getPublicUrl(fileName);
+
+    const imageUrl = data.publicUrl;
+
+    const { error: insertError } = await supabase
+      .from("ataques")
+      .insert([
+        {
+          imagem_url: imageUrl,
+          atacante: "anonimo",
+          atacado: atacado,
+          personagens,
+          cenario,
+          finalizacao,
+          tamanho,
+          pontos: total,
+          fogo_amigo: false,
+          time: time,
+        }
+      ]);
+
+    if (insertError) throw insertError;
+
+    alert("Ataque enviado com sucesso 😎");
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  } finally {
+    setLoading(false); // 🔥 E AQUI
+  }
+}
   return (
     <Parallax pages={3.2} ref={parallaxRef}>
 
@@ -475,13 +475,15 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
 
           {/* BOTÃO ENVIAR  */}
-          <button
-            onClick={handleSubmit}
-            className="mt-10 mb-20 bg-[#8b7df0] hover:bg-[#7a6ce0] text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] active:scale-95"
-            style={bebasStyle}
-          >
-            ENVIAR ATAQUE
-          </button>
+<button
+  onClick={handleSubmit}
+  disabled={loading}
+  className={`mt-10 mb-20 text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] 
+  ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-[#8b7df0] hover:bg-[#7a6ce0] active:scale-95"}`}
+  style={bebasStyle}
+>
+  {loading ? "ENVIANDO..." : "ENVIAR ATAQUE"}
+</button>
         </section>
 
       </ParallaxLayer>

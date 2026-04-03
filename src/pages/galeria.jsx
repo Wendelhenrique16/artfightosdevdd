@@ -105,13 +105,68 @@ const ranking = Object.values(
 
             {/* Info do Ataque */}
 {selectedArt && (
-  <div className="text-center space-y-2 mb-8 text-[12px] text-gray-400 font-mono">
-    <p>| Atacante | Atacado | Pontos |</p>
-    <p className="text-white">
-      | {selectedArt.atacante} | {selectedArt.atacado} | {selectedArt.pontos} |
+<div className="w-full mb-6 space-y-3 text-center">
+
+  {/* 👤 Atacante */}
+  <div className="bg-[#0f0f1a] border border-white/10 rounded-lg py-2">
+    <p className="text-[10px] text-gray-500 uppercase tracking-widest">
+      Atacante
+    </p>
+    <p className="text-white text-[14px]">
+      @{selectedArt.atacante || "Anônimo"}
     </p>
   </div>
+
+  {/* 🎯 Atacado */}
+  <div className="bg-[#0f0f1a] border border-white/10 rounded-lg py-2">
+    <p className="text-[10px] text-gray-500 uppercase tracking-widest">
+      Alvo
+    </p>
+    <p className="text-white text-[14px]">
+      @{selectedArt.atacado}
+    </p>
+  </div>
+
+  {/* 💥 Pontos */}
+  <div className="bg-[#0f0f1a] border border-white/10 rounded-lg py-3">
+    <p className="text-[10px] text-gray-500 uppercase tracking-widest">
+      Pontos
+    </p>
+    <p className="text-[28px] text-purple-400 font-bold drop-shadow">
+      +{selectedArt.pontos}
+    </p>
+  </div>
+
+</div>
 )}
+<button
+  onClick={async () => {
+    if (!selectedArt) return;
+
+    const confirmDelete = confirm("Apagar esse ataque?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase
+      .from("ataques")
+      .delete()
+      .eq("id", selectedArt.id);
+
+    if (error) {
+      console.error(error);
+      alert("Erro ao apagar");
+      return;
+    }
+
+    setAtaques((prev) =>
+      prev.filter(a => a.id !== selectedArt.id)
+    );
+
+    setSelectedArt(null); // limpa preview
+  }}
+  className="text-red-400 text-xs hover:text-red-300"
+>
+  Apagar
+</button>
 
             <button className="w-full bg-[#6355ff] hover:bg-[#5244e0] py-4 rounded-xl text-[20px] transition-all uppercase shadow-lg shadow-purple-500/20" style={bebasStyle}>
               Visualizar Arte Completa
