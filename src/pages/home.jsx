@@ -44,7 +44,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
     return;
   }
 
-  setLoading(true); // 🔥 ADICIONA AQUI
+  setLoading(true); 
 
   try {
     const fileName = `${Date.now()}-${file.name}`;
