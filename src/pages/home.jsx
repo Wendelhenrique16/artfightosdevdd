@@ -46,7 +46,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
     return;
   }
 
-  setLoading(true); // 🔥 ADICIONA AQUI
+  setLoading(true); 
 
   try {
     const fileName = `${Date.now()}-${file.name}`;
@@ -88,7 +88,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
     console.error(err);
     alert(err.message);
   } finally {
-    setLoading(false); // 🔥 E AQUI
+    setLoading(false); 
   }
 }
   return (
@@ -96,7 +96,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
-      {/* 🔥 HERO SECTION */}
+      {/* HERO SECTION */}
       <ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
         <section className="h-screen flex flex-col items-center justify-center text-center px-4">
           <h1
@@ -117,7 +117,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
             <button
               onClick={() => {
                 const startTime = performance.now();
-                const duration = 5000; // pode aumentar
+                const duration = 5000; // aumentar se necessário
 
                 const start = parallaxRef.current.current;
                 const end = 2;
@@ -126,7 +126,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
                   const elapsed = now - startTime;
                   const progress = Math.min(elapsed / duration, 1);
 
-                  // 🔥 EASE-OUT (melhor pra UX)
+                  //  EASE-OUT 
                   const ease = 1 - Math.pow(1 - progress, 2);
 
                   const value = start + (end - start) * ease;
@@ -155,7 +155,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
         </section>
       </ParallaxLayer>
 
-      {/* 🌌 DECORATIVE ELEMENTS (Layer 0) */}
+      {/* ELEMENTOS DECORATIVOS (Layer 0) */}
       <ParallaxLayer offset={0} speed={0.2} style={{ zIndex: 1 }}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-10 left-10 w-40 h-40 bg-purple-500/10 rotate-45 blur-xl" />
@@ -163,13 +163,13 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
           <div className="absolute top-40 left-[20%] w-20 h-20 bg-white/10 rotate-45" />
         </div>
       </ParallaxLayer>
-      {/* 🎮 GALERIA (Página 1) */}
+      {/*  GALERIA (Página 1) */}
 
-      {/* 🟣 FUNDO PROFUNDO (quase infinito) */}
+      {/* FUNDO PROFUNDO (quase infinito) */}
       <ParallaxLayer offset={1} speed={0.05}>
         <div className="absolute inset-0 pointer-events-none">
 
-          {/* 💀 LOSANGO GIGANTE (o principal) */}
+          {/* LOSANGO GIGANTE  */}
           <div className="absolute left-1/2 top-1/2 
       w-[120vw] h-[120vw] 
       -translate-x-1/2 -translate-y-1/2
@@ -179,7 +179,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
       opacity-40"
           />
 
-          {/* 🧊 LOSANGO SECUNDÁRIO */}
+          {/* LOSANGO SECUNDÁRIO */}
           <div className="absolute top-[20vh] left-[10vw] 
       w-[80vw] h-[80vw] 
       bg-blue-500/5 
@@ -188,7 +188,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
       opacity-30"
           />
 
-          {/* 🖼️ IMAGENS DISTANTES (bem sutis) */}
+          {/* IMAGENS DISTANTES (bem sutis) */}
           <img
             src={chester}
             className="absolute top-[10vh] left-[20vw] 
@@ -219,7 +219,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
       </ParallaxLayer>
 
 
-      {/* 📝 TEXTO (velocidade média) */}
+      {/*  TEXTO (velocidade média) */}
       <ParallaxLayer offset={1} speed={0.25}>
         <div className="h-screen flex items-center justify-center pointer-events-none">
           <h2
@@ -230,7 +230,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
           </h2>
         </div>
       </ParallaxLayer>
-      {/* ✨ ESTRELAS GLOBAIS (camada mais rápida) */}
+      {/* ESTRELAS GLOBAIS (camada mais rápida) */}
       <ParallaxLayer offset={0} speed={1.2} factor={3.5}>
         <div className="absolute inset-0 pointer-events-none z-50">
 
@@ -245,19 +245,19 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
     shadow-[0_0_12px_rgba(255,255,255,1),0_0_30px_rgba(255,255,255,0.7)]" />
 
 
-          {/* 🌌 MÉDIAS */}
+          {/*  MÉDIAS */}
           <div className="absolute top-[30vh] left-[40vw] w-2 h-2 bg-purple-300/40 rotate-45 blur-[1px]" />
           <div className="absolute top-[50vh] right-[30vw] w-3 h-3 bg-blue-300/30 rotate-45 blur-[1px]" />
           <div className="absolute bottom-[10vh] right-[10vw] w-2 h-2 bg-purple-200/40 rotate-45 blur-[1px]" />
 
 
-          {/* ✨ PEQUENAS (profundidade) */}
+          {/* PEQUENAS (profundidade) */}
           <div className="absolute top-[10vh] left-[60vw] w-1 h-1 bg-white/40 rotate-45 blur-[1px]" />
           <div className="absolute top-[70vh] left-[30vw] w-1 h-1 bg-white/30 rotate-45 blur-[1px]" />
           <div className="absolute bottom-[5vh] left-[50vw] w-1 h-1 bg-white/30 rotate-45 blur-[1px]" />
 
 
-          {/* 💥 EXTRAS (espalhados pra invadir tudo) */}
+          {/*  EXTRAS (espalhados pra invadir tudo) */}
           <div className="absolute top-[25vh] left-[5vw] w-2 h-2 bg-white/50 rotate-45 blur-[1px]" />
           <div className="absolute top-[60vh] right-[5vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
 
@@ -270,7 +270,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
         </div>
       </ParallaxLayer>
 
-      {/* 🖼️ IMAGENS (rápidas = frente) */}
+      {/*  IMAGENS (rápidas = frente) */}
       <ParallaxLayer offset={1} speed={0.6}>
         <div className="absolute inset-0">
 
@@ -305,9 +305,9 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
         </div>
       </ParallaxLayer>
-      {/* 📌 REGISTRO SECTION (Layer 2) */}
+      {/* REGISTRO SECTION (Layer 2) */}
       <ParallaxLayer offset={2} speed={0.3}>
-        {/* Container principal com padding no topo para respirar */}
+        {/* Container principal com padding no topo para respirar(testar o padding) */}
         <section id="registro" className="relative flex flex-col items-center justify-start min-h-screen pt-12 pb-24 px-4 overflow-visible">
 
           {/* --- LOSANGOS  --- */}
@@ -346,7 +346,7 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
               />
 
               <span className="text-[10px] text-gray-400 mb-6 tracking-widest uppercase opacity-60 group-hover:opacity-100" style={bebasStyle}>
-                [ ARRASTE OU CLIQUE AQUI PARA ENVIAR SUA ARTE ]
+                [ CLIQUE AQUI PARA ENVIAR SUA ARTE ]
               </span>
 
               {file ? (
