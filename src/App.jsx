@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import Auth from "./pages/auth.jsx";
 import Home from "./pages/home.jsx";
 import Galeria from "./pages/galeria.jsx";
+
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/galeria" element={<Galeria />} />
+        <Route path="/auth" element={<Auth />} />
       </Routes>
     </BrowserRouter>
   );

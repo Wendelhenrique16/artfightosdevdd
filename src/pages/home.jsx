@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import siena from "../assets/images/siena.png";
 import stevey from "../assets/images/stevey.png";
 import satoshi from "../assets/images/satoshisangue.png";
+import noah from "../assets/images/noah.png";
+
+
 
 function App() {
   const [fogoAmigoQtd, setFogoAmigoQtd] = useState(0);
@@ -21,7 +24,7 @@ function App() {
   const parallaxRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const base = (finalizacao * tamanho) + cenario;
-
+  const [user, setUser] = useState(null);
   const personagensNormais = personagens - fogoAmigoQtd;
 
   const total =
@@ -32,7 +35,7 @@ function App() {
   const [atacado, setAtacado] = useState("");
   const navigate = useNavigate();
   const fakeTimes = ["ODV", "RIVAL"];
-const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
+  const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
 
 
@@ -40,57 +43,99 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
- async function handleSubmit() {
-  if (!file) {
-    alert("Envia uma imagem primeiro");
-    return;
+
+  // AUTH
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
+  async function signUp(email, password, username, time) {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username, time }
+      }
+    });
+
+    if (error) alert(error.message);
+    return data;
   }
 
-  setLoading(true); 
+  async function signIn(email, password) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-  try {
-    const fileName = `${Date.now()}-${file.name}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from("artworks")
-      .upload(fileName, file);
-
-    if (uploadError) throw uploadError;
-
-    const { data } = supabase.storage
-      .from("artworks")
-      .getPublicUrl(fileName);
-
-    const imageUrl = data.publicUrl;
-
-    const { error: insertError } = await supabase
-      .from("ataques")
-      .insert([
-        {
-          imagem_url: imageUrl,
-          atacante: "anonimo",
-          atacado: atacado,
-          personagens,
-          cenario,
-          finalizacao,
-          tamanho,
-          pontos: total,
-          fogo_amigo: false,
-          time: time,
-        }
-      ]);
-
-    if (insertError) throw insertError;
-
-    alert("Ataque enviado com sucesso 😎");
-
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  } finally {
-    setLoading(false); 
+    if (error) alert(error.message);
+    return data;
   }
-}
+
+
+  async function handleSubmit() {
+    if (!user) {
+      alert("Você precisa estar logado!");
+      return;
+    }
+    if (!file) {
+      alert("Envia uma imagem primeiro");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const fileName = `${Date.now()}-${file.name}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("artworks")
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from("artworks")
+        .getPublicUrl(fileName);
+
+      const imageUrl = data.publicUrl;
+
+      const { error: insertError } = await supabase
+        .from("ataques")
+        .insert([
+          {
+            imagem_url: imageUrl,
+            atacado: atacado,
+            personagens,
+            cenario,
+            finalizacao,
+            tamanho,
+            pontos: total,
+            fogo_amigo: false,
+            atacante: user?.user_metadata?.username || "anonimo",
+            time: user?.user_metadata?.time || "??",
+            user_id: user?.id,
+          }
+        ]);
+
+      if (insertError) throw insertError;
+
+      alert("Ataque enviado com sucesso 😎");
+
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <Parallax pages={3.2} ref={parallaxRef}>
 
@@ -105,6 +150,12 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
           >
             Bem vindo ao Artfight (ODV Edition)
           </h1>
+          <button
+            onClick={() => navigate("/auth")}
+            className="fixed top-4 right-4 bg-white/10 px-3 py-1 rounded"
+          >
+            Login
+          </button>
 
           <p
             className="text-[24px] text-gray-400 mb-5.25 max-w-2xl"
@@ -195,10 +246,10 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
       w-[30vw] opacity-20 blur-sm"
           />
 
-          
+
           {/* Satoshi */}
-   
-            <img src={satoshi} className="absolute bottom-[15vh] right-[15vw] 
+
+          <img src={satoshi} className="absolute bottom-[15vh] right-[15vw] 
       w-[25vw] opacity-10 blur-sm"
           />
 
@@ -301,6 +352,9 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
           <div className="absolute top-[5vh] left-[40vw] rotate-6 transition-transform hover:scale-110 duration-500">
             <img src={stevey} className="w-[10vw] min-w-25 max-w-45 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
           </div>
+
+
+
 
 
         </div>
@@ -481,15 +535,15 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
 
           {/* BOTÃO ENVIAR  */}
-<button
-  onClick={handleSubmit}
-  disabled={loading}
-  className={`mt-10 mb-20 text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] 
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className={`mt-10 mb-20 text-[#111] text-[36px] px-24 py-2.5 rounded-2xl transition-all shadow-[0_10px_30px_rgba(139,125,240,0.3)] 
   ${loading ? "bg-gray-500 cursor-not-allowed" : "bg-[#8b7df0] hover:bg-[#7a6ce0] active:scale-95"}`}
-  style={bebasStyle}
->
-  {loading ? "ENVIANDO..." : "ENVIAR ATAQUE"}
-</button>
+            style={bebasStyle}
+          >
+            {loading ? "ENVIANDO..." : "ENVIAR ATAQUE"}
+          </button>
         </section>
 
       </ParallaxLayer>
