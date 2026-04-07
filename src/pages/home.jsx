@@ -8,6 +8,8 @@ import chester from "../assets/images/chester.png";
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import { useNavigate } from "react-router-dom";
 import siena from "../assets/images/siena.png";
+import stevey from "../assets/images/stevey.png";
+import satoshi from "../assets/images/satoshisangue.png";
 
 function App() {
   const [fogoAmigoQtd, setFogoAmigoQtd] = useState(0);
@@ -193,6 +195,14 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
       w-[30vw] opacity-20 blur-sm"
           />
 
+          
+          {/* Satoshi */}
+   
+            <img src={satoshi} className="absolute bottom-[15vh] right-[15vw] 
+      w-[25vw] opacity-10 blur-sm"
+          />
+
+
           <img
             src="/bg2.png"
             className="absolute bottom-[15vh] right-[15vw] 
@@ -287,15 +297,11 @@ const time = fakeTimes[Math.floor(Math.random() * fakeTimes.length)];
 
 
 
-          {/* Art7 */}
+          {/* Stevey */}
           <div className="absolute top-[5vh] left-[40vw] rotate-6 transition-transform hover:scale-110 duration-500">
-            <img src="/img7.png" className="w-[10vw] min-w-25 max-w-45 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
+            <img src={stevey} className="w-[10vw] min-w-25 max-w-45 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
           </div>
 
-          {/* Art8 */}
-          <div className="absolute bottom-[5vh] left-[45vw] rotate-6 transition-transform hover:scale-110 duration-500">
-            <img src="/img8.png" className="w-[12vw] min-w-30 max-w-55 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
-          </div>
 
         </div>
       </ParallaxLayer>
