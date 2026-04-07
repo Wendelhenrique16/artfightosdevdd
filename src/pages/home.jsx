@@ -248,7 +248,12 @@ function App() {
         </div>
       </ParallaxLayer>
       {/* ESTRELAS GLOBAIS (camada mais rápida) */}
-      <ParallaxLayer offset={0} speed={1.2} factor={3.5}>
+      <ParallaxLayer
+  offset={0}
+  speed={1.2}
+  factor={3.5}
+  style={{ zIndex: 999 }}
+>
         <div className="absolute inset-0 pointer-events-none z-50">
 
           {/* ⭐ BRILHANTES (principais) */}
