@@ -44,41 +44,6 @@ function App() {
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
 
-  // AUTH
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-    });
-
-    return () => listener.subscription.unsubscribe();
-  }, []);
-  async function signUp(email, password, username, time) {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { username, time }
-      }
-    });
-
-    if (error) alert(error.message);
-    return data;
-  }
-
-  async function signIn(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) alert(error.message);
-    return data;
-  }
-
 
   async function handleSubmit() {
     if (!user) {
@@ -127,7 +92,7 @@ function App() {
 
       if (insertError) throw insertError;
 
-      alert("Ataque enviado com sucesso 😎");
+      alert("Ataque enviado com sucesso!");
 
     } catch (err) {
       console.error(err);
@@ -137,74 +102,75 @@ function App() {
     }
   }
   return (
-    <Parallax pages={3.2} ref={parallaxRef}>
+    <Parallax pages={4} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
-      {/* HERO SECTION */}
-      <ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
-        <section className="h-screen flex flex-col items-center justify-center text-center px-4">
-          <h1
-            className="text-[64px] tracking-widest uppercase mb-4 text-white"
-            style={antonStyle}
-          >
-            Bem vindo ao Artfight (ODV Edition)
-          </h1>
-          <button
-            onClick={() => navigate("/auth")}
-            className="fixed top-4 right-4 bg-white/10 px-3 py-1 rounded"
-          >
-            Login
-          </button>
+{/* HERO SECTION */}
+<ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
+  <section className="h-screen flex flex-col items-center justify-center text-center px-4">
 
-          <p
-            className="text-[24px] text-gray-400 mb-5.25 max-w-2xl"
-            style={crimsonStyle}
-          >
-            Onde os de verdade se reunem para desenhar os personagens uns dos outros.
-          </p>
+    <h1
+      className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl tracking-widest uppercase mb-4 text-white"
+      style={antonStyle}
+    >
+      Bem vindo ao Artfight (ODV Edition)
+    </h1>
 
-          <div className="flex gap-4">
-            <button
-              onClick={() => {
-                const startTime = performance.now();
-                const duration = 5000; // aumentar se necessário
+    <button
+      onClick={() => navigate("/auth")}
+      className="text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-white/10 px-3 py-1 rounded"
+    >
+      Login
+    </button>
 
-                const start = parallaxRef.current.current;
-                const end = 2;
+    <p
+      className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 max-w-2xl"
+      style={crimsonStyle}
+    >
+      Onde os de verdade se reunem para desenhar os personagens uns dos outros.
+    </p>
 
-                const animate = (now) => {
-                  const elapsed = now - startTime;
-                  const progress = Math.min(elapsed / duration, 1);
+    <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
 
-                  //  EASE-OUT 
-                  const ease = 1 - Math.pow(1 - progress, 2);
+      <button
+        onClick={() => {
+          const startTime = performance.now();
+          const duration = 5000;
 
-                  const value = start + (end - start) * ease;
+          const start = parallaxRef.current.current;
+          const end = 2;
 
-                  parallaxRef.current.scrollTo(value);
+          const animate = (now) => {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 2);
 
-                  if (progress < 1) requestAnimationFrame(animate);
-                };
+            const value = start + (end - start) * ease;
+            parallaxRef.current.scrollTo(value);
 
-                requestAnimationFrame(animate);
-              }}
-              className="bg-[#444444] hover:bg-[#555555] w-49 h-12 text-[24px] rounded-xl text-white transition-all"
-              style={bebasStyle}
-            >
-              Registrar Ataque
-            </button>
+            if (progress < 1) requestAnimationFrame(animate);
+          };
 
-            <button
-              onClick={() => navigate("/galeria")}
-              className="bg-[#201E27] hover:bg-[#2a2833] border border-white/25 w-63.75 h-12 text-[24px] rounded-xl text-white transition-all"
-              style={bebasStyle}
-            >
-              Visualizar últimos ataques
-            </button>
-          </div>
-        </section>
-      </ParallaxLayer>
+          requestAnimationFrame(animate);
+        }}
+        className="w-full sm:w-auto px-6 py-3 bg-[#444444] hover:bg-[#555555] text-sm sm:text-lg md:text-xl rounded-xl"
+        style={bebasStyle}
+      >
+        Registrar Ataque
+      </button>
+
+      <button
+        onClick={() => navigate("/galeria")}
+        className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl"
+        style={bebasStyle}
+      >
+        Visualizar ataques
+      </button>
+
+    </div>
+  </section>
+</ParallaxLayer>
 
       {/* ELEMENTOS DECORATIVOS (Layer 0) */}
       <ParallaxLayer offset={0} speed={0.2} style={{ zIndex: 1 }}>
@@ -326,7 +292,7 @@ function App() {
         <div className="absolute inset-0">
 
           {/* Gilmara */}
-          <div className="absolute top-[10vh] left-[5vw] rotate-10 transition-transform hover:scale-110 duration-500">
+          <div className="absolute top-[5vh] left-[2vw] sm:top-[8vh] sm:left-[4vw] md:top-[10vh] md:left-[5vw] rotate-10 transition-transform hover:scale-110 duration-500">
             <img src={gilmara} className="w-[12vw] min-w-30 max-w-55 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
           </div>
           <div className="absolute bottom-[10vh] left-[30vw] w-3 h-3 bg-white rotate-45 
@@ -377,15 +343,14 @@ function App() {
 
           {/* TÍTULO */}
           <h1
-            className="text-[72px] text-[#EAEAF0] mb-8 text-center leading-tight drop-shadow-lg"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] text-[#EAEAF0] mb-8 text-center leading-tight drop-shadow-lg"
             style={bebasStyle}
           >
             ART FIGHT ODV EDITION
           </h1>
 
           {/* CARD DE REGISTRO */}
-          <div className="flex flex-col md:flex-row gap-6 bg-[#181825]/90 backdrop-blur-sm p-8 rounded-3xl border border-[#2a2a3a] shadow-[0_0_50px_rgba(0,0,0,0.6)] max-w-5xl w-full">
-
+ <div className="flex flex-col md:flex-row gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 bg-[#181825]/90 rounded-3xl max-w-5xl w-full">
             {/* ÁREA DE UPLOAD */}
             <div
               className="flex-[1.5] bg-[#11111d] rounded-2xl border-2 border-dashed border-[#2a2a40] flex flex-col items-center justify-center p-8 cursor-pointer hover:border-purple-500/50 transition-colors group"
@@ -417,7 +382,7 @@ function App() {
             <div className="flex-1 flex flex-col items-center justify-between py-2">
               <div className="text-center">
                 <span className="text-[10px] text-gray-500 uppercase tracking-widest block mb-1">Registrar novo ataque</span>
-                <span className="text-[90px] leading-none font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                <span className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl leading-none font-bold text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
                   {total}
                 </span>
                 <span className="text-lg text-gray-400 uppercase block tracking-wider" style={bebasStyle}>Pontos</span>
