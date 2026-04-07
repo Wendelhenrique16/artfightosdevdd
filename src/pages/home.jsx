@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import siena from "../assets/images/siena.png";
 import stevey from "../assets/images/stevey.png";
 import satoshi from "../assets/images/satoshisangue.png";
-import noah from "../assets/images/noah.png";
+
 
 
 
@@ -119,7 +119,7 @@ function App() {
 
     <button
       onClick={() => navigate("/auth")}
-      className="text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-white/10 px-3 py-1 rounded"
+      className="text-white text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-white/10 px-3 py-1 rounded"
     >
       Login
     </button>
@@ -154,7 +154,7 @@ function App() {
 
           requestAnimationFrame(animate);
         }}
-        className="w-full sm:w-auto px-6 py-3 bg-[#444444] hover:bg-[#555555] text-sm sm:text-lg md:text-xl rounded-xl"
+        className="w-full sm:w-auto px-6 py-3 bg-[#444444] hover:bg-[#555555] text-sm sm:text-lg md:text-xl rounded-xl text-white"
         style={bebasStyle}
       >
         Registrar Ataque
@@ -162,7 +162,7 @@ function App() {
 
       <button
         onClick={() => navigate("/galeria")}
-        className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl"
+        className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl text-white"
         style={bebasStyle}
       >
         Visualizar ataques
