@@ -252,7 +252,10 @@ function App() {
   offset={0}
   speed={1.2}
   factor={3.5}
-  style={{ zIndex: 999 }}
+  style={{
+    zIndex: 100,
+    pointerEvents: "none"
+  }}
 >
         <div className="absolute inset-0 pointer-events-none z-50">
 

@@ -121,7 +121,7 @@ function Auth() {
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center focus:border-purple-500 outline-none"
               >
-                <option value="tsundere"> Tsundere-chan(>///<)</option>
+<option value="tsundere"> Tsundere-chan(&gt;///&lt;)</option>
                 <option value="alfa"> Alfa intimidador </option>
               </select>
             )}
