@@ -42,7 +42,7 @@ function Auth() {
 
         if (error) throw error;
 
-        alert("Conta criada 🔥");
+        alert("Conta criada");
         setIsLogin(true);
       }
     } catch (err) {
@@ -70,7 +70,12 @@ function Auth() {
         <div className="flex justify-center md:justify-end w-full md:w-auto">
           <img
             src={noah}
-            className="w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] opacity-50 sm:opacity-70 md:opacity-100 rotate-6 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] transition-transform hover:scale-110"
+            className="w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] opacity-50 sm:opacity-70 md:opacity-100 rotate-6 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] transition-transform hover:scale-110
+  translate-x-[10px] 
+  md:translate-x-[30px] 
+  lg:translate-x-[60px]
+  translate-y-[-5px] 
+  md:translate-y-[-20px]"
           />
         </div>
 
@@ -116,8 +121,8 @@ function Auth() {
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center focus:border-purple-500 outline-none"
               >
-                <option value="ODV"> Tsundere-chan(>///<)</option>
-                <option value="RIVAL"> Alfa intimidador </option>
+                <option value="tsundere"> Tsundere-chan(>///<)</option>
+                <option value="alfa"> Alfa intimidador </option>
               </select>
             )}
 
