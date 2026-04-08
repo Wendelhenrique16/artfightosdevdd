@@ -2,7 +2,7 @@
 
 O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição artística entre amigos. O sistema automatiza o cálculo de pontos de "ataques" (artes enviadas) e gerencia a disputa entre duas equipes rivais.
 
-## 🔗 Links do Projeto
+##  Links do Projeto
 * **Design (Figma):** [ArtFightODV-EDITION](https://www.figma.com/design/SEiTWjGIn6w7YF1G63VCgK/ArtFightODV-EDITION?node-id=0-1&p=f&t=PSWNL8auQvuKYrNw-0)
 * **Documentação Técnica:** `docs/ART FIGHT (ODV EDITION).pdf`
 
