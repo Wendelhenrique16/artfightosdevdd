@@ -12,7 +12,7 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [time, setTime] = useState("ODV");
+  const [time, setTime] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -55,7 +55,7 @@ function Auth() {
   return (
     <div className="min-h-screen bg-[#0a0a0c] flex items-center justify-center text-white px-4 overflow-hidden">
 
-      {/* ✨ ESTRELAS */}
+      {/*  ESTRELAS */}
       <div className="absolute inset-0 pointer-events-none opacity-70 sm:opacity-100">
         <div className="absolute top-[10vh] left-[15vw] w-2 h-2 bg-white rotate-45 shadow-[0_0_10px_white]" />
         <div className="absolute top-[30vh] right-[10vw] w-1 h-1 bg-white/60 rotate-45" />
@@ -63,10 +63,10 @@ function Auth() {
         <div className="absolute bottom-[10vh] right-[25vw] w-1 h-1 bg-white/40 rotate-45" />
       </div>
 
-      {/* 🔥 CONTAINER CENTRAL */}
+      {/*  CONTAINER CENTRAL */}
       <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10 relative w-full max-w-5xl">
 
-        {/* 🧍 ESQUERDA */}
+        {/*  ESQUERDA */}
         <div className="flex justify-center md:justify-end w-full md:w-auto">
           <img
             src={noah}
@@ -74,7 +74,7 @@ function Auth() {
           />
         </div>
 
-        {/* 💎 CARD */}
+        {/*  CARD */}
         <div className="relative w-full max-w-md bg-[#181825]/90 backdrop-blur-sm p-5 sm:p-6 md:p-8 rounded-3xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.6)]">
 
           <h1
@@ -88,7 +88,7 @@ function Auth() {
 
             {!isLogin && (
               <input
-                placeholder="SEU NOME DE GUERRA"
+                placeholder="SEU NOME"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center placeholder:opacity-30 focus:border-purple-500 outline-none"
@@ -104,7 +104,7 @@ function Auth() {
 
             <input
               type="password"
-              placeholder="SENHA SECRETA"
+              placeholder="SENHA"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center placeholder:opacity-30 focus:border-purple-500 outline-none"
@@ -116,8 +116,8 @@ function Auth() {
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center focus:border-purple-500 outline-none"
               >
-                <option value="ODV">🔥 ODV</option>
-                <option value="RIVAL">⚔️ RIVAL</option>
+                <option value="ODV"> Tsundere-chan(>///<)</option>
+                <option value="RIVAL"> Alfa intimidador </option>
               </select>
             )}
 
