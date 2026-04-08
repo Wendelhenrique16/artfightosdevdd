@@ -43,6 +43,8 @@ O cálculo segue a ordem de precedência técnica:
 ├── public/             # Ativos estáticos (favicons, etc)
 ├── src/                # Código-fonte React
 │   ├── assets/         # Imagens e estilos globais
+│   └── pages/          # Páginas separadas
+│   └── app.jsx/        # Rotas
 │   └── ...
 ├── .gitignore          # Arquivos ignorados pelo Git
 ├── README.md           # Este arquivo
