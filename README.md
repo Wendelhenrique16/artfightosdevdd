@@ -1,4 +1,4 @@
-# Art Fight - ODV Edition 🎨⚔️
+# Art Fight - ODV Edition 
 
 O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição artística entre amigos. O sistema automatiza o cálculo de pontos de "ataques" (artes enviadas) e gerencia a disputa entre duas equipes rivais.
 
@@ -8,7 +8,7 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 
 ---
 
-## 🚀 Funcionalidades (Requisitos)
+##  Funcionalidades (Requisitos)
 
 ### Requisitos Funcionais (RF)
 * **RF01 - Autenticação & Onboarding:** Login/Cadastro via Supabase. No primeiro acesso, o usuário deve escolher seu time obrigatoriamente.
@@ -22,7 +22,7 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 
 ---
 
-## 🛠️ Stack Tecnológica
+##  Stack Tecnológica
 * **Frontend:** React.js (Vite).
 * **Estilização:** Tailwind CSS.
 * **Backend/Database:** Supabase (PostgreSQL).
@@ -30,13 +30,13 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 
 ---
 
-## 📊 Regra de Negócio (Pontuação)
+##  Regra de Negócio (Pontuação)
 O cálculo segue a ordem de precedência técnica:  
 **Total = [(Pintura × Tamanho) × Qtd_Personagens] + Pontos_Fundo + Doodles**
 
 ---
 
-## 📂 Estrutura de Pastas
+##  Estrutura de Pastas
 ```text
 .
 ├── docs/               # Documentação técnica e requisitos
