@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import siena from "../assets/images/siena.png";
 import stevey from "../assets/images/stevey.png";
 import satoshi from "../assets/images/satoshisangue.png";
-
+import dandendindondun from "../assets/images/dandendindondun.png";
 
 
 
@@ -101,6 +101,17 @@ function App() {
       setLoading(false);
     }
   }
+  useEffect(() => {
+  supabase.auth.getUser().then(({ data }) => {
+    setUser(data.user);
+  });
+
+  const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    setUser(session?.user || null);
+  });
+
+  return () => listener.subscription.unsubscribe();
+}, []);
   return (
     <Parallax pages={4} ref={parallaxRef}>
 
@@ -220,17 +231,7 @@ function App() {
           />
 
 
-          <img
-            src="/bg2.png"
-            className="absolute bottom-[15vh] right-[15vw] 
-      w-[25vw] opacity-10 blur-sm"
-          />
 
-          <img
-            src="/bg3.png"
-            className="absolute top-[50vh] left-[60vw] 
-      w-[20vw] opacity-10 blur-sm"
-          />
 
         </div>
       </ParallaxLayer>
@@ -291,6 +292,10 @@ function App() {
             <img src={siena} className="w-[13vw] min-w-60 max-w-120 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
           </div>
           <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
+          {/* Dandendindondun */}
+          <div className="absolute bottom-[-150vh] right-[1vw] transition-transform hover:scale-110 duration-500">
+            <img src={dandendindondun} className="w-[100vw] min-w-25 max-w-100 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+          </div>
 
         </div>
       </ParallaxLayer>
