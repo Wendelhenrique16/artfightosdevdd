@@ -83,7 +83,7 @@ function App() {
             finalizacao,
             tamanho,
             pontos: total,
-            fogo_amigo: false,
+            fogo_amigo: fogoAmigoQtd,
             atacante: user?.user_metadata?.username || "anonimo",
             time: user?.user_metadata?.time || "??",
             user_id: user?.id,
