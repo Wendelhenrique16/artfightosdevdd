@@ -292,10 +292,7 @@ function App() {
             <img src={siena} className="w-[13vw] min-w-60 max-w-120 drop-shadow-[0_0_20px_rgba(0,0,0,0.7)] select-none" />
           </div>
           <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
-          {/* Dandendindondun */}
-          <div className="absolute bottom-[-150vh] right-[1vw] transition-transform hover:scale-110 duration-500">
-            <img src={dandendindondun} className="w-[100vw] min-w-25 max-w-100 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
-          </div>
+
 
         </div>
       </ParallaxLayer>
@@ -324,7 +321,10 @@ function App() {
           <div className="absolute bottom-[8vh] right-[5vw] rotate-15 transition-transform hover:scale-110 duration-500">
             <img src={hector} className="w-[10vw] min-w-25 max-w-50 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
           </div>
-
+          {/* Dandendindondun */}
+          <div className="absolute bottom-[-70vh] right-[40vw] transition-transform hover:scale-110 duration-500">
+            <img src={dandendindondun} className="w-screen min-w-25 max-w-100 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
+          </div>
 
 
           {/* Stevey */}
