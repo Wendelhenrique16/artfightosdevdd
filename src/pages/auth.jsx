@@ -12,7 +12,7 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("tsundere");
 
   const [loading, setLoading] = useState(false);
 
@@ -121,7 +121,7 @@ function Auth() {
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 sm:p-3 rounded text-white text-center focus:border-purple-500 outline-none"
               >
-<option value="tsundere"> Tsundere-chan(&gt;///&lt;)</option>
+                <option value="tsundere"> Tsundere-chan(&gt;///&lt;)</option>
                 <option value="alfa"> Alfa intimidador </option>
               </select>
             )}
@@ -131,15 +131,15 @@ function Auth() {
               disabled={loading}
               className={`w-full py-2.5 sm:py-3 rounded-xl text-base sm:text-lg md:text-xl lg:text-[22px] uppercase transition-all
               ${loading
-                ? "bg-gray-600"
-                : "bg-[#8b7df0] hover:bg-[#7a6ce0] active:scale-95"}`}
+                  ? "bg-gray-600"
+                  : "bg-[#8b7df0] hover:bg-[#7a6ce0] active:scale-95"}`}
               style={bebasStyle}
             >
               {loading
                 ? "PROCESSANDO..."
                 : isLogin
-                ? "Entrar"
-                : "Criar Conta"}
+                  ? "Entrar"
+                  : "Criar Conta"}
             </button>
 
             <p
