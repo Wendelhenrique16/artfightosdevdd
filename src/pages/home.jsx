@@ -130,8 +130,8 @@ function App() {
 
     <button
       onClick={() => navigate("/auth")}
-      className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl text-white"
-        style={bebasStyle}
+      className="text-white text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
+  style={bebasStyle}
     >
       Login
     </button>
