@@ -28,13 +28,13 @@ useEffect(() => {
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
 const ranking = Object.values(
   ataques.reduce((acc, atk) => {
-    if (!acc[atk.atacante]) {
-      acc[atk.atacante] = {
-        atacante: atk.atacante,
-        pontos: 0,
-      };
-    }
-
+if (!acc[atk.atacante]) {
+  acc[atk.atacante] = {
+    atacante: atk.atacante,
+    pontos: 0,
+    time: atk.time // 
+  };
+}
     acc[atk.atacante].pontos += atk.pontos;
 
     return acc;
