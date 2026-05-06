@@ -11,6 +11,7 @@ import siena from "../assets/images/siena.png";
 import stevey from "../assets/images/stevey.png";
 import satoshi from "../assets/images/satoshisangue.png";
 import dandendindondun from "../assets/images/dandendindondun.png";
+import natasha from "../assets/images/natasha.png";
 
 
 
@@ -25,7 +26,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const base = (finalizacao * tamanho) + cenario;
   const [user, setUser] = useState(null);
-  const [ataques, setAtaques] = useState([]); // Adicione isso aqui
+  const [ataques, setAtaques] = useState([]);
   const personagensNormais = personagens - fogoAmigoQtd;
 
   const total =
@@ -35,7 +36,7 @@ function App() {
   const [file, setFile] = useState(null);
   const [atacado, setAtacado] = useState("");
   const navigate = useNavigate();
-const [teamScores, setTeamScores] = useState({ ALFA: 0, TSUNDERE: 0 });
+  const [teamScores, setTeamScores] = useState({ ALFA: 0, TSUNDERE: 0 });
 
 
 
@@ -43,23 +44,24 @@ const [teamScores, setTeamScores] = useState({ ALFA: 0, TSUNDERE: 0 });
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
-const ranking = Object.values(
-  ataques.reduce((acc, atk) => {
-    const nome = atk.atacante || "anon";
 
-    if (!acc[nome]) {
-      acc[nome] = {
-        atacante: nome,
-        pontos: 0,
-        time: atk.time
-      };
-    }
+  const ranking = Object.values(
+    ataques.reduce((acc, atk) => {
+      const nome = atk.atacante || "anon";
 
-    acc[nome].pontos += atk.pontos;
+      if (!acc[nome]) {
+        acc[nome] = {
+          atacante: nome,
+          pontos: 0,
+          time: atk.time
+        };
+      }
 
-    return acc;
-  }, {})
-).sort((a, b) => b.pontos - a.pontos);
+      acc[nome].pontos += atk.pontos;
+
+      return acc;
+    }, {})
+  ).sort((a, b) => b.pontos - a.pontos);
 
   async function handleSubmit() {
     if (!user) {
@@ -81,12 +83,12 @@ const ranking = Object.values(
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
-const userTime = user?.user_metadata?.time;
+      const userTime = user?.user_metadata?.time;
 
-if (!userTime || !["tsundere", "alfa"].includes(userTime)) {
-  alert("Usuário sem time válido!");
-  return;
-}
+      if (!userTime || !["tsundere", "alfa"].includes(userTime)) {
+        alert("Usuário sem time válido!");
+        return;
+      }
       const { data } = supabase.storage
         .from("artworks")
         .getPublicUrl(fileName);
@@ -124,185 +126,184 @@ if (!userTime || !["tsundere", "alfa"].includes(userTime)) {
   }
 
   useEffect(() => {
-  supabase.auth.getUser().then(({ data }) => {
-    setUser(data.user);
-  });
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
 
-  const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-    setUser(session?.user || null);
-  });
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
 
-  return () => listener.subscription.unsubscribe();
-}, []);
-async function fetchScores() {
-  const { data, error } = await supabase
-    .from("ataques")
-    .select("pontos, time");
+    return () => listener.subscription.unsubscribe();
+  }, []);
+  async function fetchScores() {
+    const { data, error } = await supabase
+      .from("ataques")
+      .select("pontos, time");
 
-  if (error) {
-    console.error(error);
-    return;
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const scores = data.reduce((acc, atk) => {
+      const time = atk.time;
+
+      if (!time || !["tsundere", "alfa"].includes(time)) return acc;
+
+      if (!acc[time]) acc[time] = 0;
+      acc[time] += atk.pontos;
+
+      return acc;
+    }, { tsundere: 0, alfa: 0 });
+
+    setTeamScores(scores);
   }
+  async function fetchAtaques() {
+    const { data, error } = await supabase
+      .from("ataques")
+      .select("*");
 
-  const scores = data.reduce((acc, atk) => {
-    const time = atk.time;
+    if (!error) setAtaques(data);
+  }
+  useEffect(() => {
+    fetchAtaques();
+  }, []);
+  useEffect(() => {
+    fetchScores();
 
-    if (!time || !["tsundere", "alfa"].includes(time)) return acc;
+    const channel = supabase
+      .channel("realtime-ataques")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "ataques",
+        },
+        () => {
+          fetchScores();
+        }
+      )
+      .subscribe();
 
-    if (!acc[time]) acc[time] = 0;
-    acc[time] += atk.pontos;
-
-    return acc;
-  }, { tsundere: 0, alfa: 0 });
-
-  setTeamScores(scores);
-}
-async function fetchAtaques() {
-  const { data, error } = await supabase
-    .from("ataques")
-    .select("*");
-
-  if (!error) setAtaques(data);
-}
-useEffect(() => {
-  fetchAtaques();
-}, []);
-useEffect(() => {
-  fetchScores();
-
-  const channel = supabase
-    .channel("realtime-ataques")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "ataques",
-      },
-      () => {
-        fetchScores();
-      }
-    )
-    .subscribe();
-
-  return () => {
-    supabase.removeChannel(channel);
-  };
-}, []);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
   return (
     <Parallax pages={4} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
-{/* HERO SECTION */}
-<ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
-  <section className="h-screen flex flex-col items-center justify-center text-center px-4">
+      {/* HERO SECTION */}
+      <ParallaxLayer offset={0} speed={0.5} style={{ zIndex: 10 }}>
+        <section className="h-screen flex flex-col items-center justify-center text-center px-4">
 
-    <h1
-      className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl tracking-widest uppercase mb-4 text-white"
-      style={antonStyle}
-    >
-      Bem vindo ao Artfight (ODV Edition)
-    </h1>
+          <h1
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl tracking-widest uppercase mb-4 text-white"
+            style={antonStyle}
+          >
+            Bem vindo ao Artfight (ODV Edition)
+          </h1>
 
-{user ? (
-  <div
-    className="fixed top-4 right-4 bg-[#201E27] px-4 py-2 rounded border border-white/25 text-white text-sm sm:text-base flex items-center gap-3"
-    style={bebasStyle}
-  >
-    <span>
-      {user.user_metadata?.username || "Usuário"}
-    </span>
+          {user ? (
+            <div
+              className="fixed top-4 right-4 bg-[#201E27] px-4 py-2 rounded border border-white/25 text-white text-sm sm:text-base flex items-center gap-3"
+              style={bebasStyle}
+            >
+              <span>
+                {user.user_metadata?.username || "Usuário"}
+              </span>
 
-    <button
-      onClick={async () => {
-        await supabase.auth.signOut();
-      }}
-      className="text-xs opacity-70 hover:opacity-100"
-    >
-      Sair
-    </button>
-  </div>
-) : (
-  <button
-    onClick={() => navigate("/auth")}
-    className="text-white text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
-    style={bebasStyle}
-  >
-    Login
-  </button>
-)}
+              <button
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                }}
+                className="text-xs opacity-70 hover:opacity-100"
+              >
+                Sair
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => navigate("/auth")}
+              className="text-white text-sm sm:text-base md:text-lg fixed top-4 right-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
+              style={bebasStyle}
+            >
+              Login
+            </button>
+          )}
 
-    <p
-      className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 max-w-2xl"
-      style={crimsonStyle}
-    >
-      Onde os de verdade se reunem para desenhar os personagens uns dos outros.
-    </p>
+          <p
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 max-w-2xl"
+            style={crimsonStyle}
+          >
+            Onde os de verdade se reunem para desenhar os personagens uns dos outros.
+          </p>
 
-    <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
 
-      <button
-        onClick={() => {
-          const startTime = performance.now();
-          const duration = 5000;
+            <button
+              onClick={() => {
+                const startTime = performance.now();
+                const duration = 5000;
 
-          const start = parallaxRef.current.current;
-          const end = 2;
+                const start = parallaxRef.current.current;
+                const end = 2;
 
-          const animate = (now) => {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 2);
+                const animate = (now) => {
+                  const elapsed = now - startTime;
+                  const progress = Math.min(elapsed / duration, 1);
+                  const ease = 1 - Math.pow(1 - progress, 2);
 
-            const value = start + (end - start) * ease;
-            parallaxRef.current.scrollTo(value);
+                  const value = start + (end - start) * ease;
+                  parallaxRef.current.scrollTo(value);
 
-            if (progress < 1) requestAnimationFrame(animate);
-          };
+                  if (progress < 1) requestAnimationFrame(animate);
+                };
 
-          requestAnimationFrame(animate);
-        }}
-        className="w-full sm:w-auto px-6 py-3 bg-[#444444] hover:bg-[#555555] text-sm sm:text-lg md:text-xl rounded-xl text-white"
-        style={bebasStyle}
-      >
-        Registrar Ataque
-      </button>
-<div className="w-full max-w-xl mt-6">
+                requestAnimationFrame(animate);
+              }}
+              className="w-full sm:w-auto px-6 py-3 bg-[#444444] hover:bg-[#555555] text-sm sm:text-lg md:text-xl rounded-xl text-white"
+              style={bebasStyle}
+            >
+              Registrar Ataque
+            </button>
+            <div className="w-full max-w-xl mt-6">
 
-  {/* TEXTO */}
-  <div className="flex justify-between text-white text-sm mb-1" style={bebasStyle}>
-    <span>ALFA {teamScores.alfa} pts</span>
-    <span>{teamScores.tsundere} pts TSUNDERE</span>
-  </div>
+              {/* TEXTO */}
+              <div className="flex justify-between text-white text-sm mb-1" style={bebasStyle}>
+                <span>ALFA {teamScores.alfa} pts</span>
+                <span>{teamScores.tsundere} pts TSUNDERE</span>
+              </div>
 
-  {/* BARRA */}
-  <div className="w-full h-4 bg-[#1a1a22] rounded-full overflow-hidden border border-white/10">
+              {/* BARRA */}
+              <div className="w-full h-4 bg-[#1a1a22] rounded-full overflow-hidden border border-white/10">
 
-    <div
-      className="h-full bg-purple-500 transition-all duration-500"
-      style={{
-        width: `${
-          (teamScores.alfa /
-            (teamScores.alfa + teamScores.tsundere || 1)) *
-          100
-        }%`
-      }}
-    />
+                <div
+                  className="h-full bg-purple-500 transition-all duration-500"
+                  style={{
+                    width: `${(teamScores.alfa /
+                        (teamScores.alfa + teamScores.tsundere || 1)) *
+                      100
+                      }%`
+                  }}
+                />
 
-  </div>
-</div>
-      <button
-        onClick={() => navigate("/galeria")}
-        className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl text-white"
-        style={bebasStyle}
-      >
-        Visualizar ataques
-      </button>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate("/galeria")}
+              className="w-full sm:w-auto px-6 py-3 bg-[#201E27] hover:bg-[#2a2833] border border-white/25 text-sm sm:text-lg md:text-xl rounded-xl text-white"
+              style={bebasStyle}
+            >
+              Visualizar ataques
+            </button>
 
-    </div>
-  </section>
-</ParallaxLayer>
+          </div>
+        </section>
+      </ParallaxLayer>
 
       {/* ELEMENTOS DECORATIVOS (Layer 0) */}
       <ParallaxLayer offset={0} speed={0.2} style={{ zIndex: 1 }}>
@@ -371,14 +372,14 @@ useEffect(() => {
       </ParallaxLayer>
       {/* ESTRELAS GLOBAIS (camada mais rápida) */}
       <ParallaxLayer
-  offset={0}
-  speed={1.2}
-  factor={3.5}
-  style={{
-    zIndex: 100,
-    pointerEvents: "none"
-  }}
->
+        offset={0}
+        speed={1.2}
+        factor={3.5}
+        style={{
+          zIndex: 100,
+          pointerEvents: "none"
+        }}
+      >
         <div className="absolute inset-0 pointer-events-none z-50">
 
           {/* ⭐ BRILHANTES (principais) */}
@@ -415,104 +416,102 @@ useEffect(() => {
           <div className="absolute bottom-[30vh] left-[70vw] w-2 h-2 bg-white/40 rotate-45 blur-[1px]" />
 
 
-{/* BARRA DE GUERRA FLUTUANTE (Lá no fundo, atrás de tudo) */}
-<ParallaxLayer offset={1.5} speed={0.1} style={{ zIndex: 0 }}>
-  <div className="flex flex-col items-center opacity-30">
-    <h2 style={bebasStyle} className="text-white text-9xl tracking-[0.5em] select-none">CONFLITO</h2>
-    <div className="w-[80vw] h-1 bg-gradient-to-r from-purple-900 via-transparent to-pink-900" />
-  </div>
-</ParallaxLayer>
-{/* DASHBOARD FLUTUANTE NA GALERIA */}
-<ParallaxLayer offset={1.2} speed={0.4} style={{ zIndex: 5, pointerEvents: 'auto' }}>
-  <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6">
-    
-    {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
-    <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
-      <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1">SUA CONTRIBUIÇÃO</h3>
-      <div className="flex items-baseline gap-2">
-        <span style={antonStyle} className="text-5xl text-white">
-          {ataques.filter(a => a.user_id === user?.id).reduce((acc, a) => acc + a.pontos, 0)}
-        </span>
-        <span style={bebasStyle} className="text-purple-400 text-xl">PTS</span>
-      </div>
-    </div>
+          {/* BARRA DE GUERRA FLUTUANTE (Lá no fundo, atrás de tudo) */}
+          <ParallaxLayer offset={1.5} speed={0.1} style={{ zIndex: 0 }}>
+            <div className="flex flex-col items-center opacity-30">
+              <h2 style={bebasStyle} className="text-white text-9xl tracking-[0.5em] select-none">CONFLITO</h2>
+              <div className="w-[80vw] h-1 bg-gradient-to-r from-purple-900 via-transparent to-pink-900" />
+            </div>
+          </ParallaxLayer>
+          {/* DASHBOARD FLUTUANTE NA GALERIA */}
+          <ParallaxLayer offset={1.2} speed={0.4} style={{ zIndex: 5, pointerEvents: 'auto' }}>
+            <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6">
 
-  {/* 🌍 GLOBAL */}
-  <div className="bg-[#181825]/40 backdrop-blur-sm p-3 rounded-xl border border-white/5">
-    <p style={crimsonStyle} className="text-gray-500 italic text-xs text-center">
-      {ataques.length} ataques registrados
-    </p>
-  </div>
+              {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
+              <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
+                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1">SUA CONTRIBUIÇÃO</h3>
+                <div className="flex items-baseline gap-2">
+                  <span style={antonStyle} className="text-5xl text-white">
+                    {ataques.filter(a => a.user_id === user?.id).reduce((acc, a) => acc + a.pontos, 0)}
+                  </span>
+                  <span style={bebasStyle} className="text-purple-400 text-xl">PTS</span>
+                </div>
+              </div>
 
-  {/* 🏆 TOP 3 */}
-  <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
-    <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
-      TOP ARTISTAS
-    </h3>
+              {/* 🌍 GLOBAL */}
+              <div className="bg-[#181825]/40 backdrop-blur-sm p-3 rounded-xl border border-white/5">
+                <p style={crimsonStyle} className="text-gray-500 italic text-xs text-center">
+                  {ataques.length} ataques registrados
+                </p>
+              </div>
 
-    <div className="space-y-2">
-      {ranking.slice(0, 3).map((p, i) => (
-        <div
-          key={p.atacante}
-          className={`flex justify-between text-sm px-2 py-1 rounded ${
-            i === 0 ? "bg-purple-500/10" : ""
-          }`}
-        >
-          <span className="text-gray-300">
-            #{i + 1} {p.atacante}
-          </span>
+              {/* 🏆 TOP 3 */}
+              <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
+                  TOP ARTISTAS
+                </h3>
 
-          <span className="text-white font-mono">
-            {p.pontos}
-          </span>
-        </div>
-      ))}
-    </div>
-  </div>
-   {/* ⚔️ STATUS DA GUERRA */}
-  <div className="bg-[#181825]/50 backdrop-blur-md p-4 rounded-xl border border-white/10">
-    <div className="flex justify-between text-xs text-gray-400 mb-2">
-      <span>ALFA</span>
-      <span>TSUNDERE</span>
-    </div>
+                <div className="space-y-2">
+                  {ranking.slice(0, 3).map((p, i) => (
+                    <div
+                      key={p.atacante}
+                      className={`flex justify-between text-sm px-2 py-1 rounded ${i === 0 ? "bg-purple-500/10" : ""
+                        }`}
+                    >
+                      <span className="text-gray-300">
+                        #{i + 1} {p.atacante}
+                      </span>
 
-    <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
-      <div
-        className="h-full bg-purple-500 transition-all"
-        style={{
-          width: `${
-            (teamScores.alfa /
-              (teamScores.alfa + teamScores.tsundere || 1)) * 100
-          }%`
-        }}
-      />
-    </div>
-  </div>
-  <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6 w-[280px]">
+                      <span className="text-white font-mono">
+                        {p.pontos}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* ⚔️ STATUS DA GUERRA */}
+              <div className="bg-[#181825]/50 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <div className="flex justify-between text-xs text-gray-400 mb-2">
+                  <span>ALFA</span>
+                  <span>TSUNDERE</span>
+                </div>
+
+                <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-purple-500 transition-all"
+                    style={{
+                      width: `${(teamScores.alfa /
+                          (teamScores.alfa + teamScores.tsundere || 1)) * 100
+                        }%`
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6 w-[280px]">
 
 
-  </div>
-  <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
-  <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
-    TOP 3 ARTISTAS
-  </h3>
+              </div>
+              <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
+                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
+                  TOP 3 ARTISTAS
+                </h3>
 
-  <div className="space-y-2">
-    {ranking.slice(0, 3).map((p, i) => (
-      <div key={p.atacante} className="flex justify-between text-sm">
-        <span className="text-gray-400">
-          #{i + 1} {p.atacante}
-        </span>
+                <div className="space-y-2">
+                  {ranking.slice(0, 3).map((p, i) => (
+                    <div key={p.atacante} className="flex justify-between text-sm">
+                      <span className="text-gray-400">
+                        #{i + 1} {p.atacante}
+                      </span>
 
-        <span className="text-white font-mono">
-          {p.pontos}
-        </span>
-      </div>
-    ))}
-  </div>
-</div>
-</div>
-</ParallaxLayer>
+                      <span className="text-white font-mono">
+                        {p.pontos}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ParallaxLayer>
         </div>
       </ParallaxLayer>
 
@@ -582,7 +581,7 @@ useEffect(() => {
           </h1>
 
           {/* CARD DE REGISTRO */}
- <div className="flex flex-col md:flex-row gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 bg-[#181825]/90 rounded-3xl max-w-5xl w-full">
+          <div className="flex flex-col md:flex-row gap-4 sm:gap-6 p-4 sm:p-6 md:p-8 bg-[#181825]/90 rounded-3xl max-w-5xl w-full">
             {/* ÁREA DE UPLOAD */}
             <div
               className="flex-[1.5] bg-[#11111d] rounded-2xl border-2 border-dashed border-[#2a2a40] flex flex-col items-center justify-center p-8 cursor-pointer hover:border-purple-500/50 transition-colors group"
