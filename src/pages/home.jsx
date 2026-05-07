@@ -225,6 +225,7 @@ function App() {
                 Sair
               </button>
             </div>
+            
           ) : (
             <button
               onClick={() => navigate("/auth")}
@@ -233,8 +234,20 @@ function App() {
             >
               Login
             </button>
-          )}
 
+          )}         
+          {user ? (
+          <div>    
+            
+          <button
+              onClick={() => navigate("/perfil")}
+              className="text-white text-sm sm:text-base md:text-lg fixed top-4 left-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
+              style={bebasStyle}
+            >
+              Perfil do Usuário
+            </button>
+</div>
+          ) : null}
           <p
             className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 max-w-2xl"
             style={crimsonStyle}
@@ -418,18 +431,20 @@ function App() {
 
           {/* BARRA DE GUERRA FLUTUANTE (Lá no fundo, atrás de tudo) */}
           <ParallaxLayer offset={1.5} speed={0.1} style={{ zIndex: 0 }}>
-            <div className="flex flex-col items-center opacity-30">
+            <div className="flex flex-col items-center opacity-30 justifyContent: 'flex-end'" >
               <h2 style={bebasStyle} className="text-white text-9xl tracking-[0.5em] select-none">CONFLITO</h2>
               <div className="w-[80vw] h-1 bg-gradient-to-r from-purple-900 via-transparent to-pink-900" />
             </div>
           </ParallaxLayer>
+
+
           {/* DASHBOARD FLUTUANTE NA GALERIA */}
-          <ParallaxLayer offset={1.2} speed={0.4} style={{ zIndex: 5, pointerEvents: 'auto' }}>
-            <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6">
+          <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+            <div className="justifyContent: 'flex-end'">
 
               {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
               <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
-                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1">SUA CONTRIBUIÇÃO</h3>
+                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1 justifyContent: 'flex-end'">SUA CONTRIBUIÇÃO</h3>
                 <div className="flex items-baseline gap-2">
                   <span style={antonStyle} className="text-5xl text-white">
                     {ataques.filter(a => a.user_id === user?.id).reduce((acc, a) => acc + a.pontos, 0)}
