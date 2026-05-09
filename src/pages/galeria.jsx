@@ -205,7 +205,7 @@ if (!acc[atk.atacante]) {
         {player.pontos}
       </td>
       <td className={`py-4 font-bold ${
-  player.time === "ODV" ? "text-purple-400" : "text-red-400"
+  player.time === "alfa" ? "text-purple-400" : "text-pink-400"
 }`}>
   {player.time || "??"}
 </td>

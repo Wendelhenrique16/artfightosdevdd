@@ -192,7 +192,7 @@ function App() {
     };
   }, []);
   return (
-    <Parallax pages={4} ref={parallaxRef}>
+    <Parallax pages={3} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
@@ -460,6 +460,8 @@ function App() {
                 </p>
               </div>
 
+        
+            
               {/* 🏆 TOP 3 */}
               <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
                 <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
@@ -484,6 +486,7 @@ function App() {
                   ))}
                 </div>
               </div>
+              
               {/* ⚔️ STATUS DA GUERRA */}
               <div className="bg-[#181825]/50 backdrop-blur-md p-4 rounded-xl border border-white/10">
                 <div className="flex justify-between text-xs text-gray-400 mb-2">
@@ -526,8 +529,10 @@ function App() {
                 </div>
               </div>
             </div>
+
           </ParallaxLayer>
         </div>
+        
       </ParallaxLayer>
 
       {/*  IMAGENS (rápidas = frente) */}
@@ -634,7 +639,7 @@ function App() {
                 <span className="text-lg text-gray-400 uppercase block tracking-wider" style={bebasStyle}>Pontos</span>
               </div>
 
-              <div className="w-full space-y-4 mt-4">
+<div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                 <div className="space-y-1 text-center">
                   <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
                   <input
