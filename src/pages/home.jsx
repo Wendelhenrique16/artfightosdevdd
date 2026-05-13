@@ -440,8 +440,10 @@ function App() {
 
           {/* DASHBOARD FLUTUANTE NA GALERIA */}
           <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
-            <div className="justifyContent: 'flex-end'">
-
+            <div class=" columns-3" className="justifyContent: 'flex-end'">
+ <img class="aspect-3/2 ..." src="/img/mountains-1.jpg" />
+  <img class="aspect-square ..." src="/img/mountains-2.jpg" />
+  <img class="aspect-square ..." src="/img/mountains-3.jpg" />
               {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
               <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
                 <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1 justifyContent: 'flex-end'">SUA CONTRIBUIÇÃO</h3>
