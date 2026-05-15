@@ -192,7 +192,7 @@ function App() {
     };
   }, []);
   return (
-    <Parallax pages={4} ref={parallaxRef}>
+    <Parallax pages={3.7} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
@@ -763,7 +763,42 @@ function App() {
         </section>
 
       </ParallaxLayer>
+{/* FOOTER */}
+<ParallaxLayer
+  offset={3.5}
+  speed={0.2}
+  style={{
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    pointerEvents: "none",
+  }}
+>
+  <footer className="w-full border-t border-white/10 bg-[#0a0a0c]/80 backdrop-blur-md py-6 px-4">
+    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
 
+      <div className="text-gray-400 text-sm" style={crimsonStyle}>
+        © 2026 Art Fight ODV Edition
+      </div>
+
+      <div
+        className="flex items-center gap-6 text-xs uppercase tracking-widest text-gray-500"
+        style={bebasStyle}
+      >
+        <button className="hover:text-white transition-colors">
+          Regras
+        </button>
+
+        <button className="hover:text-white transition-colors">
+          Créditos
+        </button>
+
+        <button className="hover:text-white transition-colors">
+          Discord
+        </button>
+      </div>
+    </div>
+  </footer>
     </Parallax>
   );
 }
