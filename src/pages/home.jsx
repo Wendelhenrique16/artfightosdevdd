@@ -192,7 +192,7 @@ function App() {
     };
   }, []);
   return (
-    <Parallax pages={3} ref={parallaxRef}>
+    <Parallax pages={4} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
