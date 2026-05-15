@@ -29,7 +29,8 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 * Dashboard de resultados, ranking e informações essenciais em tempo real;
 * Galeria de ataques com crud completo (limitado ao usuário "dono")
 * Ranking global e Log de ataques na Galeria.
-  
+
+---
 
 ##  Stack Tecnológica
 * **Frontend:** React.js (Vite).
