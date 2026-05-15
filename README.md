@@ -8,7 +8,7 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 
 ---
 
-##  Funcionalidades (Requisitos)
+##  (Requisitos)
 
 ### Requisitos Funcionais (RF)
 * **RF01 - Autenticação & Onboarding:** Login/Cadastro via Supabase. No primeiro acesso, o usuário deve escolher seu time obrigatoriamente.
@@ -21,6 +21,15 @@ O **Art Fight (ODV Edition)** é uma plataforma web gamificada para competição
 * **RNF02 - Performance:** Entrega de imagens otimizada via Supabase Storage.
 
 ---
+
+## Funcionalidades 
+
+* Login e Auth via supabase;
+* Perfil Customizavel;
+* Dashboard de resultados, ranking e informações essenciais em tempo real;
+* Galeria de ataques com crud completo (limitado ao usuário "dono")
+* Ranking global e Log de ataques na Galeria.
+  
 
 ##  Stack Tecnológica
 * **Frontend:** React.js (Vite).
