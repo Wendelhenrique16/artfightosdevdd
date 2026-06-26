@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "../utils/supabase";
-
+import {
+  getYouTubeEmbedUrl,
+  isVideoAttack,
+} from "../utils/youtube";
 
 
 function Galeria() {
@@ -75,10 +78,20 @@ if (!acc[atk.atacante]) {
     onClick={() => setSelectedArt(ataque)}
     className="aspect-square bg-[#0a0a14] border border-white/10 rounded-xl hover:border-purple-500 cursor-pointer transition-all overflow-hidden"
   >
-    <img
-      src={ataque.imagem_url}
-      className="w-full h-full object-cover"
-    />
+    <div className="relative w-full h-full">
+  <img
+    src={ataque.thumbnail_url || ataque.imagem_url}
+    className="w-full h-full object-cover"
+  />
+
+  {isVideoAttack(ataque) && (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+      <span className="w-12 h-12 rounded-full bg-white/90 text-black flex items-center justify-center text-xl">
+        ▶
+      </span>
+    </div>
+  )}
+</div>
   </div>
 ))}
             </div>
@@ -92,11 +105,21 @@ if (!acc[atk.atacante]) {
             
             {/* Moldura da Imagem */}
             <div className="w-full aspect-square bg-[#0a0a14] border border-white/10 rounded-lg mb-6 flex items-center justify-center overflow-hidden">
-              {selectedArt ? (
-  <img
-    src={selectedArt.imagem_url}
-    className="w-full h-full object-contain"
-  />
+{selectedArt ? (
+  isVideoAttack(selectedArt) ? (
+    <iframe
+      src={getYouTubeEmbedUrl(selectedArt.youtube_video_id)}
+      title={`Animação de ${selectedArt.atacante || "artista"}`}
+      className="w-full h-full"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  ) : (
+    <img
+      src={selectedArt.imagem_url}
+      className="w-full h-full object-contain"
+    />
+  )
 ) : (
   <span className="text-gray-700 text-xs">Selecione uma arte</span>
 )}

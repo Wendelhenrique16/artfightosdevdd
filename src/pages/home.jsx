@@ -12,7 +12,10 @@ import stevey from "../assets/images/stevey.png";
 import satoshi from "../assets/images/satoshisangue.png";
 import dandendindondun from "../assets/images/dandendindondun.png";
 import natasha from "../assets/images/natasha.png";
-
+import {
+  getYouTubeVideoId,
+  getYouTubeThumbnailUrl,
+} from "../utils/youtube";
 
 
 function App() {
@@ -35,6 +38,7 @@ function App() {
     doodles;
   const [file, setFile] = useState(null);
   const [atacado, setAtacado] = useState("");
+  const [youtubeUrl, setYoutubeUrl] = useState("");
   const navigate = useNavigate();
   const [teamScores, setTeamScores] = useState({ ALFA: 0, TSUNDERE: 0 });
 
@@ -68,49 +72,74 @@ function App() {
       alert("Você precisa estar logado!");
       return;
     }
-    if (!file) {
-      alert("Envia uma imagem primeiro");
-      return;
-    }
+ const trimmedYoutubeUrl = youtubeUrl.trim();
+const youtubeVideoId = getYouTubeVideoId(trimmedYoutubeUrl);
+
+if (!file && !trimmedYoutubeUrl) {
+  alert("Envie uma imagem ou um link do YouTube.");
+  return;
+}
+
+if (trimmedYoutubeUrl && !youtubeVideoId) {
+  alert("Link do YouTube inválido.");
+  return;
+}
 
     setLoading(true);
 
     try {
-      const fileName = `${Date.now()}-${file.name}`;
+let imageUrl = "";
+let thumbnailUrl = "";
+let mediaType = "image";
 
-      const { error: uploadError } = await supabase.storage
-        .from("artworks")
-        .upload(fileName, file);
+if (trimmedYoutubeUrl) {
+  mediaType = "video";
+  thumbnailUrl = getYouTubeThumbnailUrl(youtubeVideoId);
+  imageUrl = thumbnailUrl;
+} else {
+  const fileName = `${Date.now()}-${file.name}`;
 
-      if (uploadError) throw uploadError;
+  const { error: uploadError } = await supabase.storage
+    .from("artworks")
+    .upload(fileName, file);
+
+  if (uploadError) throw uploadError;
+
+  const { data } = supabase.storage
+    .from("artworks")
+    .getPublicUrl(fileName);
+
+  imageUrl = data.publicUrl;
+  thumbnailUrl = imageUrl;
+}
       const userTime = user?.user_metadata?.time;
 
       if (!userTime || !["tsundere", "alfa"].includes(userTime)) {
         alert("Usuário sem time válido!");
         return;
       }
-      const { data } = supabase.storage
-        .from("artworks")
-        .getPublicUrl(fileName);
 
-      const imageUrl = data.publicUrl;
 
       const { error: insertError } = await supabase
         .from("ataques")
         .insert([
           {
-            imagem_url: imageUrl,
-            atacado: atacado,
-            personagens,
-            cenario,
-            finalizacao,
-            tamanho,
-            pontos: total,
-            fogo_amigo: fogoAmigoQtd,
-            atacante: user?.user_metadata?.username || "anonimo",
-            time: userTime,
-            user_id: user?.id,
-          }
+  imagem_url: imageUrl,
+  thumbnail_url: thumbnailUrl,
+  media_type: mediaType,
+  youtube_url: trimmedYoutubeUrl || null,
+  youtube_video_id: youtubeVideoId || null,
+  atacado: atacado,
+  personagens,
+  cenario,
+  finalizacao,
+  tamanho,
+  pontos: total,
+  fogo_amigo: fogoAmigoQtd,
+  atacante: user?.user_metadata?.username || "anonimo",
+  time: userTime,
+  user_id: user?.id,
+}
         ]);
 
       if (insertError) throw insertError;
@@ -436,8 +465,7 @@ function App() {
               <div className="w-[80vw] h-1 bg-gradient-to-r from-purple-900 via-transparent to-pink-900" />
             </div>
           </ParallaxLayer>
-
-
+          
           {/* DASHBOARD FLUTUANTE NA GALERIA */}
           <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
             <div class=" columns-3" className="justifyContent: 'flex-end'">
@@ -650,6 +678,25 @@ function App() {
                     placeholder="NOME DO ATACADO"
                     className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
                   />
+                  <div className="space-y-1 text-center sm:col-span-2">
+  <label
+    className="text-[16px] uppercase text-gray-500 tracking-tighter"
+    style={bebasStyle}
+  >
+    Link do YouTube para animação
+  </label>
+
+  <input
+    value={youtubeUrl}
+    onChange={(e) => setYoutubeUrl(e.target.value)}
+    placeholder="https://www.youtube.com/watch?v=..."
+    className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
+  />
+
+  <p className="text-[10px] text-gray-600">
+    Use imagem ou link do YouTube. Se preencher os dois, o YouTube será usado.
+  </p>
+</div>
                 </div>
                 <div className="space-y-1 text-center">
                   <label

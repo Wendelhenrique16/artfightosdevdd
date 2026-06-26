@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { useNavigate } from "react-router-dom";
+import { isVideoAttack } from "../utils/youtube";
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -110,11 +111,21 @@ export default function Perfil() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {meusAtaques.map((atk) => (
                 <div key={atk.id} className="group relative aspect-square bg-[#11111d] rounded-2xl border border-white/5 overflow-hidden hover:border-purple-500/50 transition-all">
-                  <img 
-                    src={atk.imagem_url} 
-                    alt="Ataque" 
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  />
+                  <div className="relative w-full h-full">
+  <img
+    src={atk.thumbnail_url || atk.imagem_url}
+    alt={isVideoAttack(atk) ? "Animação" : "Ataque"}
+    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+  />
+
+  {isVideoAttack(atk) && (
+    <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+      <span className="w-10 h-10 rounded-full bg-white/90 text-black flex items-center justify-center text-lg">
+        ▶
+      </span>
+    </div>
+  )}
+</div>
                   <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
                     <p className="text-[10px] text-white uppercase truncate">Alvo: {atk.atacado}</p>
                     <p className="text-[10px] text-purple-400 font-bold">+{atk.pontos} PTS</p>
