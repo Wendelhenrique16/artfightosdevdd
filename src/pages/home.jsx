@@ -72,46 +72,46 @@ function App() {
       alert("Você precisa estar logado!");
       return;
     }
- const trimmedYoutubeUrl = youtubeUrl.trim();
-const youtubeVideoId = getYouTubeVideoId(trimmedYoutubeUrl);
+    const trimmedYoutubeUrl = youtubeUrl.trim();
+    const youtubeVideoId = getYouTubeVideoId(trimmedYoutubeUrl);
 
-if (!file && !trimmedYoutubeUrl) {
-  alert("Envie uma imagem ou um link do YouTube.");
-  return;
-}
+    if (!file && !trimmedYoutubeUrl) {
+      alert("Envie uma imagem ou um link do YouTube.");
+      return;
+    }
 
-if (trimmedYoutubeUrl && !youtubeVideoId) {
-  alert("Link do YouTube inválido.");
-  return;
-}
+    if (trimmedYoutubeUrl && !youtubeVideoId) {
+      alert("Link do YouTube inválido.");
+      return;
+    }
 
     setLoading(true);
 
     try {
-let imageUrl = "";
-let thumbnailUrl = "";
-let mediaType = "image";
+      let imageUrl = "";
+      let thumbnailUrl = "";
+      let mediaType = "image";
 
-if (trimmedYoutubeUrl) {
-  mediaType = "video";
-  thumbnailUrl = getYouTubeThumbnailUrl(youtubeVideoId);
-  imageUrl = thumbnailUrl;
-} else {
-  const fileName = `${Date.now()}-${file.name}`;
+      if (trimmedYoutubeUrl) {
+        mediaType = "video";
+        thumbnailUrl = getYouTubeThumbnailUrl(youtubeVideoId);
+        imageUrl = thumbnailUrl;
+      } else {
+        const fileName = `${Date.now()}-${file.name}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from("artworks")
-    .upload(fileName, file);
+        const { error: uploadError } = await supabase.storage
+          .from("artworks")
+          .upload(fileName, file);
 
-  if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-  const { data } = supabase.storage
-    .from("artworks")
-    .getPublicUrl(fileName);
+        const { data } = supabase.storage
+          .from("artworks")
+          .getPublicUrl(fileName);
 
-  imageUrl = data.publicUrl;
-  thumbnailUrl = imageUrl;
-}
+        imageUrl = data.publicUrl;
+        thumbnailUrl = imageUrl;
+      }
       const userTime = user?.user_metadata?.time;
 
       if (!userTime || !["tsundere", "alfa"].includes(userTime)) {
@@ -124,22 +124,22 @@ if (trimmedYoutubeUrl) {
         .from("ataques")
         .insert([
           {
-  imagem_url: imageUrl,
-  thumbnail_url: thumbnailUrl,
-  media_type: mediaType,
-  youtube_url: trimmedYoutubeUrl || null,
-  youtube_video_id: youtubeVideoId || null,
-  atacado: atacado,
-  personagens,
-  cenario,
-  finalizacao,
-  tamanho,
-  pontos: total,
-  fogo_amigo: fogoAmigoQtd,
-  atacante: user?.user_metadata?.username || "anonimo",
-  time: userTime,
-  user_id: user?.id,
-}
+            imagem_url: imageUrl,
+            thumbnail_url: thumbnailUrl,
+            media_type: mediaType,
+            youtube_url: trimmedYoutubeUrl || null,
+            youtube_video_id: youtubeVideoId || null,
+            atacado: atacado,
+            personagens,
+            cenario,
+            finalizacao,
+            tamanho,
+            pontos: total,
+            fogo_amigo: fogoAmigoQtd,
+            atacante: user?.user_metadata?.username || "anonimo",
+            time: userTime,
+            user_id: user?.id,
+          }
         ]);
 
       if (insertError) throw insertError;
@@ -254,7 +254,7 @@ if (trimmedYoutubeUrl) {
                 Sair
               </button>
             </div>
-            
+
           ) : (
             <button
               onClick={() => navigate("/auth")}
@@ -264,18 +264,18 @@ if (trimmedYoutubeUrl) {
               Login
             </button>
 
-          )}         
+          )}
           {user ? (
-          <div>    
-            
-          <button
-              onClick={() => navigate("/perfil")}
-              className="text-white text-sm sm:text-base md:text-lg fixed top-4 left-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
-              style={bebasStyle}
-            >
-              Perfil do Usuário
-            </button>
-</div>
+            <div>
+
+              <button
+                onClick={() => navigate("/perfil")}
+                className="text-white text-sm sm:text-base md:text-lg fixed top-4 left-4 bg-[#201E27] px-3 py-1 rounded border border-white/25"
+                style={bebasStyle}
+              >
+                Perfil do Usuário
+              </button>
+            </div>
           ) : null}
           <p
             className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 mb-6 max-w-2xl"
@@ -327,7 +327,7 @@ if (trimmedYoutubeUrl) {
                   className="h-full bg-purple-500 transition-all duration-500"
                   style={{
                     width: `${(teamScores.alfa /
-                        (teamScores.alfa + teamScores.tsundere || 1)) *
+                      (teamScores.alfa + teamScores.tsundere || 1)) *
                       100
                       }%`
                   }}
@@ -465,9 +465,9 @@ if (trimmedYoutubeUrl) {
               <div className="w-[80vw] h-1 bg-gradient-to-r from-purple-900 via-transparent to-pink-900" />
             </div>
           </ParallaxLayer>
-          
+
           {/* DASHBOARD FLUTUANTE NA GALERIA */}
-          <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
+          <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div class=" columns-3" className="justifyContent: 'flex-end'">
 
               {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
@@ -488,8 +488,8 @@ if (trimmedYoutubeUrl) {
                 </p>
               </div>
 
-        
-            
+
+
               {/* 🏆 TOP 3 */}
               <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
                 <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
@@ -514,7 +514,7 @@ if (trimmedYoutubeUrl) {
                   ))}
                 </div>
               </div>
-              
+
               {/* ⚔️ STATUS DA GUERRA */}
               <div className="bg-[#181825]/50 backdrop-blur-md p-4 rounded-xl border border-white/10">
                 <div className="flex justify-between text-xs text-gray-400 mb-2">
@@ -527,7 +527,7 @@ if (trimmedYoutubeUrl) {
                     className="h-full bg-purple-500 transition-all"
                     style={{
                       width: `${(teamScores.alfa /
-                          (teamScores.alfa + teamScores.tsundere || 1)) * 100
+                        (teamScores.alfa + teamScores.tsundere || 1)) * 100
                         }%`
                     }}
                   />
@@ -560,7 +560,7 @@ if (trimmedYoutubeUrl) {
 
           </ParallaxLayer>
         </div>
-        
+
       </ParallaxLayer>
 
       {/*  IMAGENS (rápidas = frente) */}
@@ -667,7 +667,7 @@ if (trimmedYoutubeUrl) {
                 <span className="text-lg text-gray-400 uppercase block tracking-wider" style={bebasStyle}>Pontos</span>
               </div>
 
-<div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mt-4">
                 <div className="space-y-1 text-center">
                   <label className="text-[16px] uppercase text-gray-500 tracking-tighter" style={bebasStyle}>Quem está sendo atacado?</label>
                   <input
@@ -677,24 +677,24 @@ if (trimmedYoutubeUrl) {
                     className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
                   />
                   <div className="space-y-1 text-center sm:col-span-2">
-  <label
-    className="text-[16px] uppercase text-gray-500 tracking-tighter"
-    style={bebasStyle}
-  >
-    Link do YouTube para animação
-  </label>
+                    <label
+                      className="text-[16px] uppercase text-gray-500 tracking-tighter"
+                      style={bebasStyle}
+                    >
+                      Link do YouTube para animação
+                    </label>
 
-  <input
-    value={youtubeUrl}
-    onChange={(e) => setYoutubeUrl(e.target.value)}
-    placeholder="https://www.youtube.com/watch?v=..."
-    className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
-  />
+                    <input
+                      value={youtubeUrl}
+                      onChange={(e) => setYoutubeUrl(e.target.value)}
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      className="w-full bg-[#0a0a14] border border-[#3f3f5a] p-2.5 text-white text-center text-[11px] rounded-md focus:border-purple-500 outline-none transition-all placeholder:opacity-30"
+                    />
 
-  <p className="text-[10px] text-gray-600">
-    Use imagem ou link do YouTube. Se preencher os dois, o YouTube será usado.
-  </p>
-</div>
+                    <p className="text-[10px] text-gray-600">
+                      Use imagem ou link do YouTube. Se preencher os dois, o YouTube será usado.
+                    </p>
+                  </div>
                 </div>
                 <div className="space-y-1 text-center">
                   <label
@@ -810,42 +810,40 @@ if (trimmedYoutubeUrl) {
         </section>
 
       </ParallaxLayer>
-{/* FOOTER */}
-<ParallaxLayer
-  offset={3.5}
-  speed={0.2}
-  style={{
-    display: "flex",
-    alignItems: "flex-end",
-    justifyContent: "center",
-    pointerEvents: "none",
-  }}
->
-  <footer className="w-full border-t border-white/10 bg-[#0a0a0c]/80 backdrop-blur-md py-6 px-4">
-    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-
-      <div className="text-gray-400 text-sm" style={crimsonStyle}>
-        © 2026 Art Fight ODV Edition
-      </div>
-
-      <div
-        className="flex items-center gap-6 text-xs uppercase tracking-widest text-gray-500"
-        style={bebasStyle}
+      {/* FOOTER */}
+      <ParallaxLayer
+        offset={3.5}
+        speed={0.2}
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          pointerEvents: "none",
+        }}
       >
-        <button className="hover:text-white transition-colors">
-          Regras
-        </button>
+        <footer className="w-full border-t border-white/10 bg-[#0a0a0c]/80 backdrop-blur-md py-6 px-4 pointer-events-auto">
+          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-gray-400 text-sm" style={crimsonStyle}>
+              © 2026 Art Fight ODV Edition
+            </div>
 
-        <button className="hover:text-white transition-colors">
-          Créditos
-        </button>
-
-        <button className="hover:text-white transition-colors">
-          Discord
-        </button>
-      </div>
-    </div>
-  </footer>
+            <div
+              className="flex items-center gap-6 text-xs uppercase tracking-widest text-gray-500"
+              style={bebasStyle}
+            >
+              <button className="hover:text-white transition-colors">
+                Regras
+              </button>
+              <button className="hover:text-white transition-colors">
+                Créditos
+              </button>
+              <button className="hover:text-white transition-colors">
+                Discord
+              </button>
+            </div>
+          </div>
+        </footer>
+      </ParallaxLayer>
     </Parallax>
   );
 }
