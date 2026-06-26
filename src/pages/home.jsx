@@ -40,7 +40,7 @@ function App() {
   const [atacado, setAtacado] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const navigate = useNavigate();
-  const [teamScores, setTeamScores] = useState({ ALFA: 0, TSUNDERE: 0 });
+const [teamScores, setTeamScores] = useState({ alfa: 0, tsundere: 0 });
 
 
 
@@ -66,7 +66,36 @@ function App() {
       return acc;
     }, {})
   ).sort((a, b) => b.pontos - a.pontos);
+const scoreAlfa = teamScores.alfa || 0;
+const scoreTsundere = teamScores.tsundere || 0;
+const totalTeamScore = scoreAlfa + scoreTsundere;
 
+const alfaPercent = totalTeamScore
+  ? Math.round((scoreAlfa / totalTeamScore) * 100)
+  : 50;
+
+const tsunderePercent = 100 - alfaPercent;
+
+const leadingTeam =
+  scoreAlfa === scoreTsundere
+    ? null
+    : scoreAlfa > scoreTsundere
+      ? "alfa"
+      : "tsundere";
+
+const leadDifference = Math.abs(scoreAlfa - scoreTsundere);
+
+const warStatusText = leadingTeam
+  ? `${leadingTeam === "alfa" ? "alfa" : "tsundere"} lidera por ${leadDifference} pts`
+  : "Empate técnico";
+
+const userContribution = ataques
+  .filter((a) => a.user_id === user?.id)
+  .reduce((acc, a) => acc + a.pontos, 0);
+
+const recentAttacks = [...ataques]
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+  .slice(0, 4);
   async function handleSubmit() {
     if (!user) {
       alert("Você precisa estar logado!");
@@ -145,6 +174,11 @@ function App() {
       if (insertError) throw insertError;
 
       alert("Ataque enviado com sucesso!");
+      await fetchAtaques();
+await fetchScores();
+setFile(null);
+setAtacado("");
+setYoutubeUrl("");
 
     } catch (err) {
       console.error(err);
@@ -466,99 +500,153 @@ function App() {
             </div>
           </ParallaxLayer>
 
-          {/* DASHBOARD FLUTUANTE NA GALERIA */}
-          <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div class=" columns-3" className="justifyContent: 'flex-end'">
+         {/* DASHBOARD FLUTUANTE NA GALERIA */}
+<ParallaxLayer
+  offset={1.18}
+  speed={0.12}
+  style={{
+    zIndex: 5,
+    pointerEvents: "auto",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  }}
+>
+  <div className="w-[92vw] max-w-5xl rounded-3xl border border-white/10 bg-[#12121d]/80 backdrop-blur-xl shadow-[0_0_45px_rgba(139,125,240,0.16)] p-5 sm:p-7">
+    <div className="flex flex-col lg:flex-row gap-5">
+      
+      {/* STATUS DA GUERRA */}
+      <div className="flex-[1.4] bg-[#0a0a14]/70 border border-white/10 rounded-2xl p-5">
+        <div className="flex items-center justify-between gap-4 mb-5">
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em]" style={bebasStyle}>
+              Status da Guerra
+            </p>
+            <h3 className="text-3xl sm:text-4xl text-white uppercase leading-none" style={antonStyle}>
+              {warStatusText}
+            </h3>
+          </div>
 
-              {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
-              <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
-                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1 justifyContent: 'flex-end'">SUA CONTRIBUIÇÃO</h3>
-                <div className="flex items-baseline gap-2">
-                  <span style={antonStyle} className="text-5xl text-white">
-                    {ataques.filter(a => a.user_id === user?.id).reduce((acc, a) => acc + a.pontos, 0)}
-                  </span>
-                  <span style={bebasStyle} className="text-purple-400 text-xl">PTS</span>
-                </div>
+          <div className={`px-3 py-1 rounded-full text-[11px] uppercase font-bold border ${
+            leadingTeam === "alfa"
+              ? "bg-purple-500/15 text-purple-300 border-purple-400/30"
+              : leadingTeam === "tsundere"
+                ? "bg-pink-500/15 text-pink-300 border-pink-400/30"
+                : "bg-white/10 text-gray-300 border-white/20"
+          }`}>
+            {leadingTeam ? "Liderando" : "Empate"}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className={`rounded-2xl border p-4 ${
+            leadingTeam === "alfa"
+              ? "border-purple-400/40 bg-purple-500/10 shadow-[0_0_25px_rgba(168,85,247,0.18)]"
+              : "border-white/10 bg-white/[0.03]"
+          }`}>
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest">alfa</p>
+            <p className="text-4xl text-white leading-none" style={antonStyle}>
+              {scoreAlfa}
+            </p>
+            <p className="text-xs text-purple-300 mt-1">{alfaPercent}% do total</p>
+          </div>
+
+          <div className={`rounded-2xl border p-4 text-right ${
+            leadingTeam === "tsundere"
+              ? "border-pink-400/40 bg-pink-500/10 shadow-[0_0_25px_rgba(236,72,153,0.18)]"
+              : "border-white/10 bg-white/[0.03]"
+          }`}>
+            <p className="text-[10px] text-gray-500 uppercase tracking-widest">tsundere</p>
+            <p className="text-4xl text-white leading-none" style={antonStyle}>
+              {scoreTsundere}
+            </p>
+            <p className="text-xs text-pink-300 mt-1">{tsunderePercent}% do total</p>
+          </div>
+        </div>
+
+        <div className="relative h-5 overflow-hidden rounded-full bg-black/50 border border-white/10">
+          <div
+            className="absolute left-0 top-0 h-full bg-purple-500 transition-all duration-700"
+            style={{ width: `${alfaPercent}%` }}
+          />
+          <div
+            className="absolute right-0 top-0 h-full bg-pink-500 transition-all duration-700"
+            style={{ width: `${tsunderePercent}%` }}
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18),transparent)] opacity-30" />
+        </div>
+
+        <div className="mt-3 flex justify-between text-[10px] text-gray-500 uppercase tracking-widest">
+          <span>alfa</span>
+          <span>{totalTeamScore} pts totais</span>
+          <span>tsundere</span>
+        </div>
+      </div>
+
+      {/* RESUMO */}
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+        <div className="bg-[#0a0a14]/70 border border-white/10 rounded-2xl p-4">
+          <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em]" style={bebasStyle}>
+            Sua contribuição
+          </p>
+          <div className="flex items-end gap-2 mt-1">
+            <span className="text-5xl text-white leading-none" style={antonStyle}>
+              {userContribution}
+            </span>
+            <span className="text-purple-300 text-xl mb-1" style={bebasStyle}>
+              PTS
+            </span>
+          </div>
+        </div>
+
+        <div className="bg-[#0a0a14]/70 border border-white/10 rounded-2xl p-4">
+          <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] mb-3" style={bebasStyle}>
+            Top artistas
+          </p>
+
+          <div className="space-y-2">
+            {ranking.slice(0, 3).map((player, index) => (
+              <div
+                key={player.atacante}
+                className="flex items-center justify-between gap-3 rounded-lg bg-white/[0.03] px-3 py-2 text-sm"
+              >
+                <span className="text-gray-300 truncate">
+                  #{index + 1} {player.atacante}
+                </span>
+                <span className="text-white font-mono">
+                  {player.pontos}
+                </span>
               </div>
+            ))}
+          </div>
+        </div>
 
-              {/* 🌍 GLOBAL */}
-              <div className="bg-[#181825]/40 backdrop-blur-sm p-3 rounded-xl border border-white/5">
-                <p style={crimsonStyle} className="text-gray-500 italic text-xs text-center">
-                  {ataques.length} ataques registrados
-                </p>
-              </div>
+        <div className="bg-[#0a0a14]/70 border border-white/10 rounded-2xl p-4">
+          <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] mb-3" style={bebasStyle}>
+            Últimos ataques
+          </p>
 
+          <div className="space-y-2">
+            {recentAttacks.map((atk) => (
+              <p key={atk.id} className="text-[11px] text-gray-400 truncate">
+                <span className={atk.time === "alfa" ? "text-purple-300" : "text-pink-300"}>
+                  [{atk.time || "sem time"}]
+                </span>{" "}
+                @{atk.atacante || "anonimo"} → @{atk.atacado} · +{atk.pontos}
+              </p>
+            ))}
 
-
-              {/* 🏆 TOP 3 */}
-              <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
-                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
-                  TOP ARTISTAS
-                </h3>
-
-                <div className="space-y-2">
-                  {ranking.slice(0, 3).map((p, i) => (
-                    <div
-                      key={p.atacante}
-                      className={`flex justify-between text-sm px-2 py-1 rounded ${i === 0 ? "bg-purple-500/10" : ""
-                        }`}
-                    >
-                      <span className="text-gray-300">
-                        #{i + 1} {p.atacante}
-                      </span>
-
-                      <span className="text-white font-mono">
-                        {p.pontos}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* ⚔️ STATUS DA GUERRA */}
-              <div className="bg-[#181825]/50 backdrop-blur-md p-4 rounded-xl border border-white/10">
-                <div className="flex justify-between text-xs text-gray-400 mb-2">
-                  <span>ALFA</span>
-                  <span>TSUNDERE</span>
-                </div>
-
-                <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-purple-500 transition-all"
-                    style={{
-                      width: `${(teamScores.alfa /
-                        (teamScores.alfa + teamScores.tsundere || 1)) * 100
-                        }%`
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="absolute left-[10vw] top-[20vh] flex flex-col gap-6 w-[280px]">
-
-
-              </div>
-              <div className="bg-[#181825]/60 backdrop-blur-md p-4 rounded-xl border border-white/10">
-                <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-3">
-                  TOP 3 ARTISTAS
-                </h3>
-
-                <div className="space-y-2">
-                  {ranking.slice(0, 3).map((p, i) => (
-                    <div key={p.atacante} className="flex justify-between text-sm">
-                      <span className="text-gray-400">
-                        #{i + 1} {p.atacante}
-                      </span>
-
-                      <span className="text-white font-mono">
-                        {p.pontos}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </ParallaxLayer>
+            {recentAttacks.length === 0 && (
+              <p className="text-[11px] text-gray-600">
+                Nenhum ataque registrado ainda.
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ParallaxLayer>
         </div>
 
       </ParallaxLayer>
