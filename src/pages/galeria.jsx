@@ -346,9 +346,15 @@ function Galeria() {
                   type="number"
                   min={1}
                   value={editForm.personagens}
-                  onChange={(e) => setEditForm({ ...editForm, personagens: Number(e.target.value) })}
-                  className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 outline-none focus:border-purple-500"
-                />
+                  onChange={(e) => {
+                    const personagens = Math.max(1, Number(e.target.value));
+
+                    setEditForm({
+                      ...editForm,
+                      personagens,
+                      fogo_amigo_qtd: Math.min(Number(editForm.fogo_amigo_qtd) || 0, personagens),
+                    });
+                  }} />
               </div>
 
               <div>
@@ -359,12 +365,11 @@ function Galeria() {
                   max={editForm.personagens}
                   value={editForm.fogo_amigo_qtd}
                   onChange={(e) => {
-                    const personagens = Math.max(1, Number(e.target.value));
+                    const fogoAmigo = Math.max(0, Number(e.target.value));
 
                     setEditForm({
                       ...editForm,
-                      personagens,
-                      fogo_amigo_qtd: Math.min(Number(editForm.fogo_amigo_qtd) || 0, personagens),
+                      fogo_amigo_qtd: Math.min(fogoAmigo, Number(editForm.personagens) || 1),
                     });
                   }}
                   className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 outline-none focus:border-purple-500"

@@ -174,7 +174,8 @@ useEffect(() => {
       </div>
 
       <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-<div className="bg-[#181825] border border-white/10 p-8 rounded-3xl flex flex-col items-center text-center">
+<div className="lg:col-span-4 space-y-6">
+  <div className="bg-[#181825] border border-white/10 p-8 rounded-3xl flex flex-col items-center text-center">
   <label className="w-32 h-32 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-full mb-4 border-4 border-[#0a0a0c] shadow-xl flex items-center justify-center overflow-hidden cursor-pointer">
     {editProfile.avatar_url || avatarFile ? (
       <img
@@ -243,6 +244,7 @@ useEffect(() => {
       <p style={bebasStyle} className="text-2xl text-purple-400">{totalPontos}</p>
     </div>
   </div>
+</div>
 </div>
         {/* COLUNA DIREITA: SUA GALERIA */}
         <div className="lg:col-span-8">
