@@ -21,67 +21,78 @@ const [ataquesRecebidos, setAtaquesRecebidos] = useState([]);
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
 
-  useEffect(() => {
-    async function getProfileData() {
-      const { data: { user } } = await supabase.auth.getUser();
+useEffect(() => {
+  async function getProfileData() {
+    const { data: { user } } = await supabase.auth.getUser();
 
-      if (!user) {
-        navigate("/auth");
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    setUser(user);
+
+    const username = user.user_metadata?.username || "Artista";
+    const time = user.user_metadata?.time || null;
+
+    let { data: profileData } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (!profileData) {
+      const { data: newProfile, error: profileError } = await supabase
+        .from("profiles")
+        .insert({
+          id: user.id,
+          username,
+          time,
+          bio: "Um artista dedicado ao Art Fight ODV Edition. Pronto para desenhar e ser atacado!",
+        })
+        .select()
+        .single();
+
+      if (profileError) {
+        console.error(profileError);
+        alert("Não foi possível carregar/criar seu perfil.");
+        setLoading(false);
         return;
       }
 
-      setUser(user);
-const username = user.user_metadata?.username || "Artista";
-const time = user.user_metadata?.time || null;
-
-let { data: profileData } = await supabase
-  .from("profiles")
-  .select("*")
-  .eq("id", user.id)
-  .single();
-
-if (!profileData) {
-  const { data: newProfile } = await supabase
-    .from("profiles")
-    .insert({
-      id: user.id,
-      username,
-      time,
-      bio: "Um artista dedicado ao Art Fight ODV Edition. Pronto para desenhar e ser atacado!",
-    })
-    .select()
-    .single();
-
-  profileData = newProfile;
-}
-
-setProfile(profileData);
-setEditProfile({
-  username: profileData?.username || username,
-  bio: profileData?.bio || "",
-  avatar_url: profileData?.avatar_url || "",
-});
-      // Busca apenas os ataques feitos por este usuário, por enquanto...
-      const { data: ataques } = await supabase
-        .from("ataques")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
-
-      setMeusAtaques(ataques || []);
-      setLoading(false);
+      profileData = newProfile;
     }
-const nomeBusca = profileData?.username || username;
 
-const { data: recebidos } = await supabase
-  .from("ataques")
-  .select("*")
-  .ilike("atacado", nomeBusca)
-  .order("created_at", { ascending: false });
+    setProfile(profileData);
 
-setAtaquesRecebidos(recebidos || []);
-    getProfileData();
-  }, [navigate]);
+    setEditProfile({
+      username: profileData?.username || username,
+      bio: profileData?.bio || "",
+      avatar_url: profileData?.avatar_url || "",
+    });
+
+    const { data: ataques } = await supabase
+      .from("ataques")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+
+    setMeusAtaques(ataques || []);
+
+    const nomeBusca = profileData?.username || username;
+
+    const { data: recebidos } = await supabase
+      .from("ataques")
+      .select("*")
+      .ilike("atacado", nomeBusca)
+      .order("created_at", { ascending: false });
+
+    setAtaquesRecebidos(recebidos || []);
+    setLoading(false);
+  }
+
+  getProfileData();
+}, [navigate]);
   async function handleSaveProfile() {
   if (!user) return;
 
