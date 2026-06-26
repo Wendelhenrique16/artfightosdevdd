@@ -221,7 +221,7 @@ if (trimmedYoutubeUrl) {
     };
   }, []);
   return (
-    <Parallax pages={3} ref={parallaxRef}>
+    <Parallax pages={3.7} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
@@ -469,9 +469,7 @@ if (trimmedYoutubeUrl) {
           {/* DASHBOARD FLUTUANTE NA GALERIA */}
           <ParallaxLayer offset={1.2} speed={0.1} style={{ zIndex: 5, pointerEvents: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'  }}>
             <div class=" columns-3" className="justifyContent: 'flex-end'">
- <img class="aspect-3/2 " src="/img/mountains-1.jpg" />
-  <img class="aspect-square " src="/img/mountains-2.jpg" />
-  <img class="aspect-square " src="/img/mountains-3.jpg" />
+
               {/* Card de Pontos do Usuário - Estilo "Ficha de Personagem" */}
               <div className="bg-[#181825]/60 backdrop-blur-md p-6 rounded-2xl border-l-4 border-purple-500 shadow-2xl">
                 <h3 style={bebasStyle} className="text-gray-400 text-xs tracking-[0.2em] mb-1 justifyContent: 'flex-end'">SUA CONTRIBUIÇÃO</h3>
@@ -812,7 +810,42 @@ if (trimmedYoutubeUrl) {
         </section>
 
       </ParallaxLayer>
+{/* FOOTER */}
+<ParallaxLayer
+  offset={3.5}
+  speed={0.2}
+  style={{
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    pointerEvents: "none",
+  }}
+>
+  <footer className="w-full border-t border-white/10 bg-[#0a0a0c]/80 backdrop-blur-md py-6 px-4">
+    <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
 
+      <div className="text-gray-400 text-sm" style={crimsonStyle}>
+        © 2026 Art Fight ODV Edition
+      </div>
+
+      <div
+        className="flex items-center gap-6 text-xs uppercase tracking-widest text-gray-500"
+        style={bebasStyle}
+      >
+        <button className="hover:text-white transition-colors">
+          Regras
+        </button>
+
+        <button className="hover:text-white transition-colors">
+          Créditos
+        </button>
+
+        <button className="hover:text-white transition-colors">
+          Discord
+        </button>
+      </div>
+    </div>
+  </footer>
     </Parallax>
   );
 }
