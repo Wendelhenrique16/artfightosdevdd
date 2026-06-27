@@ -31,7 +31,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [ataques, setAtaques] = useState([]);
   const personagensNormais = personagens - fogoAmigoQtd;
-
+const [profiles, setProfiles] = useState([]);
   const total =
     (personagensNormais * base) +
     (fogoAmigoQtd * (base / 2)) +
@@ -49,23 +49,30 @@ const [teamScores, setTeamScores] = useState({ alfa: 0, tsundere: 0 });
   const crimsonStyle = { fontFamily: "'Crimson Pro', serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
 
-  const ranking = Object.values(
-    ataques.reduce((acc, atk) => {
-      const nome = atk.atacante || "anon";
+const ranking = Object.values(
+  ataques.reduce((acc, atk) => {
+    const nome = atk.atacante || "anon";
 
-      if (!acc[nome]) {
-        acc[nome] = {
-          atacante: nome,
-          pontos: 0,
-          time: atk.time
-        };
-      }
+    if (!acc[nome]) {
+      acc[nome] = {
+        atacante: nome,
+        pontos: 0,
+        time: atk.time,
+        user_id: atk.user_id,
+      };
+    }
 
-      acc[nome].pontos += atk.pontos;
+    acc[nome].pontos += atk.pontos;
 
-      return acc;
-    }, {})
-  ).sort((a, b) => b.pontos - a.pontos);
+    return acc;
+  }, {})
+).sort((a, b) => b.pontos - a.pontos);
+const topPlayer = ranking[0];
+
+const topProfile = profiles.find(
+  (p) => p.id === topPlayer?.user_id
+);
+
 const scoreAlfa = teamScores.alfa || 0;
 const scoreTsundere = teamScores.tsundere || 0;
 const totalTeamScore = scoreAlfa + scoreTsundere;
@@ -96,6 +103,15 @@ const userContribution = ataques
 const recentAttacks = [...ataques]
   .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
   .slice(0, 4);
+  async function fetchProfiles() {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, username, avatar_url");
+
+  if (!error) {
+    setProfiles(data);
+  }
+}
   async function handleSubmit() {
     if (!user) {
       alert("Você precisa estar logado!");
@@ -187,7 +203,10 @@ setYoutubeUrl("");
       setLoading(false);
     }
   }
-
+useEffect(() => {
+  fetchAtaques();
+  fetchProfiles();
+}, []);
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
@@ -581,6 +600,50 @@ setYoutubeUrl("");
           <span>{totalTeamScore} pts totais</span>
           <span>tsundere</span>
         </div>
+        <div className="bg-[#0a0a14]/70 border border-white/10 rounded-2xl p-4">
+
+  <p 
+    className="text-[10px] text-gray-500 uppercase tracking-[0.25em]"
+    style={bebasStyle}
+  >
+    Maior pontuador
+  </p>
+
+  {topPlayer && (
+    <div className="flex items-center gap-4 mt-4">
+
+      <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-purple-400 bg-purple-500/20">
+        {topProfile?.avatar_url ? (
+          <img
+            src={topProfile.avatar_url}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-2xl">
+            {topPlayer.atacante[0]}
+          </div>
+        )}
+      </div>
+
+
+      <div>
+        <p className="text-white text-xl" style={antonStyle}>
+          {topPlayer.atacante}
+        </p>
+
+        <p className="text-purple-300">
+          {topPlayer.pontos} PTS
+        </p>
+
+        <p className="text-xs text-gray-500 uppercase">
+          {topPlayer.time}
+        </p>
+      </div>
+
+    </div>
+  )}
+
+</div>
       </div>
 
       {/* RESUMO */}
@@ -617,6 +680,7 @@ setYoutubeUrl("");
                   {player.pontos}
                 </span>
               </div>
+              
             ))}
           </div>
         </div>
@@ -642,9 +706,13 @@ setYoutubeUrl("");
               </p>
             )}
           </div>
+          
         </div>
+        
       </div>
+      
     </div>
+    
   </div>
 </ParallaxLayer>
         </div>
