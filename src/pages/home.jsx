@@ -274,7 +274,7 @@ useEffect(() => {
     };
   }, []);
   return (
-    <Parallax pages={3.7} ref={parallaxRef}>
+    <Parallax pages={5} ref={parallaxRef}>
 
       <div className="fixed inset-0 -z-20 bg-[#0a0a0c]" />
 
@@ -967,16 +967,18 @@ useEffect(() => {
 
       </ParallaxLayer>
       {/* FOOTER */}
-      <ParallaxLayer
-        offset={3.5}
-        speed={0.2}
-        style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "center",
-          pointerEvents: "none",
-        }}
-      >
+<ParallaxLayer
+  offset={3.3
+  }
+  speed={0.2}
+  factor={0.7}
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+  }}
+>
         <footer className="w-full border-t border-white/10 bg-[#0a0a0c]/80 backdrop-blur-md py-6 px-4 pointer-events-auto">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-gray-400 text-sm" style={crimsonStyle}>
@@ -996,8 +998,19 @@ useEffect(() => {
               <button className="hover:text-white transition-colors">
                 Discord
               </button>
+              <button
+ onClick={()=>navigate("/artistas")}
+ className="
+ text-gray-400
+ hover:text-white
+ transition
+ "
+>
+ 👥 Artistas
+</button>
             </div>
           </div>
+          
         </footer>
       </ParallaxLayer>
     </Parallax>
