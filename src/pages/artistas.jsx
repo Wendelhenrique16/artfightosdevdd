@@ -116,16 +116,18 @@ export default function Artistas() {
 
 
 
-              <div className="
-              w-28 h-28
-              mx-auto
-              rounded-full
-              overflow-hidden
-              border-4
-              border-purple-500
-              bg-purple-500/20
-              ">
-
+<div
+  className={`
+    w-28 h-28
+    mx-auto
+    rounded-full
+    overflow-hidden
+    border-4 ${
+      artista.time === "alfa"
+        ?  "border-purple-500 bg-purple-500/20"
+        : artista.time === "tsundere"
+          ? "border-pink-500 bg-pink-500/20"
+          : "border-white/20 bg-white/5"} `}>
 
                 {
                   artista.avatar_url ?
