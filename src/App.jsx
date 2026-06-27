@@ -3,7 +3,7 @@ import Auth from "./pages/auth.jsx";
 import Home from "./pages/home.jsx";
 import Galeria from "./pages/galeria.jsx";
 import Perfil from "./pages/perfil.jsx";
-import Artistas from "./pages/Artistas";
+import Artistas from "./pages/artistas";
 import PerfilPublico from "./pages/PerfilPublico";
 
 function App() {
