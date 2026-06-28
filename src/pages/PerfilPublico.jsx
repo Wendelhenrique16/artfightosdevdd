@@ -325,11 +325,16 @@ cursor-pointer
                     className="aspect-square bg-[#181825] rounded-2xl overflow-hidden border border-white/10"
                   >
 
-                    <img
-                      src={atk.thumbnail_url || atk.imagem_url}
-                      className="w-full h-full object-cover"
-                    />
-
+                  <img
+  src={atk.thumbnail_url || atk.imagem_url}
+  onClick={() => setImagemAberta(atk.imagem_url)}
+  className="
+    w-full
+    h-full
+    object-cover
+    cursor-pointer
+  "
+/>
 
                     {isVideoAttack(atk) && (
 
@@ -392,11 +397,16 @@ cursor-pointer
                     className="aspect-square bg-[#181825] rounded-2xl overflow-hidden border border-white/10"
                   >
 
-                    <img
-                      src={atk.thumbnail_url || atk.imagem_url}
-                      className="w-full h-full object-cover"
-                    />
-
+                   <img
+  src={atk.thumbnail_url || atk.imagem_url}
+  onClick={() => setImagemAberta(atk.imagem_url)}
+  className="
+    w-full
+    h-full
+    object-cover
+    cursor-pointer
+  "
+/>
 
                   </div>
 
