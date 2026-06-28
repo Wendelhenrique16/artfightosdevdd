@@ -22,6 +22,7 @@ function Galeria() {
     tamanho: 1,
     fogo_amigo_qtd: 0,
   });
+  const [imagemAberta, setImagemAberta] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
   useEffect(() => {
     async function fetchAtaques() {
@@ -263,9 +264,13 @@ function Galeria() {
               </div>
             )}
 
-            <button className="w-full bg-[#6355ff] hover:bg-[#5244e0] py-4 rounded-xl text-[20px] transition-all uppercase shadow-lg shadow-purple-500/20" style={bebasStyle}>
-              Visualizar Arte Completa
-            </button>
+<button
+  onClick={() => setImagemAberta(selectedArt?.imagem_url)}
+  className="w-full bg-[#6355ff] hover:bg-[#5244e0] py-4 rounded-xl text-[20px] transition-all uppercase shadow-lg shadow-purple-500/20"
+  style={bebasStyle}
+>
+  Visualizar Arte Completa
+</button>
           </div>
         </section>
 
@@ -485,6 +490,30 @@ function Galeria() {
           </div>
         </div>
       )}
+      {imagemAberta && (
+  <div
+    onClick={() => setImagemAberta(null)}
+    className="
+    fixed inset-0
+    bg-black/80
+    flex
+    items-center
+    justify-center
+    z-50
+    p-10
+    "
+  >
+    <img
+      src={imagemAberta}
+      className="
+      max-h-full
+      max-w-full
+      object-contain
+      rounded-xl
+      "
+    />
+  </div>
+)}
     </div>
   );
 }
