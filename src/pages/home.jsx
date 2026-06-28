@@ -439,7 +439,29 @@ useEffect(() => {
             className="absolute top-[10vh] left-[20vw] 
       w-[30vw] opacity-50 blur-none"
           />
-
+ {/* Natasha decoração */}
+ <div className="
+ absolute
+ right-[-70px]
+ bottom-[-100px]
+ opacity-40
+ pointer-events-none
+ transition-transform
+ duration-500
+ hover:scale-105
+ ">
+ 
+   <img
+     src={natasha}
+     className="
+     w-[450px]
+     select-none
+     drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]
+     opacity-42
+     "
+   />
+ 
+ </div>
 
           {/* Satoshi */}
 
@@ -747,7 +769,7 @@ useEffect(() => {
           <div className="absolute bottom-[-70vh] right-[40vw] transition-transform hover:scale-110 duration-500">
             <img src={dandendindondun} className="w-screen min-w-25 max-w-100 drop-shadow-[0_0_20px_rgba(0,0,0,0.8)] select-none" />
           </div>
-
+     
 
           {/* Stevey */}
           <div className="absolute top-[5vh] left-[40vw] rotate-6 transition-transform hover:scale-110 duration-500">
