@@ -437,14 +437,14 @@ useEffect(() => {
           <img
             src={chester}
             className="absolute top-[10vh] left-[20vw] 
-      w-[30vw] opacity-20 blur-sm"
+      w-[30vw] opacity-50 blur-none"
           />
 
 
           {/* Satoshi */}
 
           <img src={satoshi} className="absolute bottom-[15vh] right-[15vw] 
-      w-[25vw] opacity-10 blur-sm"
+      w-[25vw] opacity-50 blur-[2px]"
           />
 
 
