@@ -2,6 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabase";
 import { isVideoAttack } from "../utils/youtube";
+import natasha from "../assets/images/natasha.png";
+import noah from "../assets/images/noah.png";
 
 export default function PerfilPublico() {
 
@@ -12,7 +14,7 @@ export default function PerfilPublico() {
   const [ataques, setAtaques] = useState([]);
   const [recebidos, setRecebidos] = useState([]);
   const [loading, setLoading] = useState(true);
-
+const [imagemAberta, setImagemAberta] = useState(null);
 
   const bebasStyle = {
     fontFamily: "'Bebas Neue', sans-serif"
@@ -123,8 +125,7 @@ export default function PerfilPublico() {
 
 
   return (
-
-    <div className="min-h-screen bg-[#0a0a0c] text-white p-6 md:p-10">
+<div className="min-h-screen bg-[#0a0a0c] text-white p-6 md:p-10 relative overflow-hidden">
 
 
       <button
@@ -192,8 +193,56 @@ export default function PerfilPublico() {
             {profile.bio || "Esse artista ainda não escreveu uma descrição."}
           </p>
 
+{profile.ocs?.length > 0 && (
+
+<section className="mt-12">
+
+<h2
+className="text-3xl uppercase mb-6"
+style={bebasStyle}
+>
+OCs para ataque
+</h2>
 
 
+<div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+
+{profile.ocs.map((oc,index)=>(
+
+<div
+key={index}
+className="
+bg-[#181825]
+border border-white/10
+rounded-2xl
+overflow-hidden
+"
+>
+
+<img
+src={oc.image || oc.preview}
+onClick={() => setImagemAberta(oc.image)}
+className="
+w-full
+aspect-square
+object-cover
+cursor-pointer
+"
+/>
+
+<p className="p-3 text-center uppercase">
+{oc.name}
+</p>
+
+</div>
+
+))}
+
+</div>
+
+</section>
+
+)}
 
           <div className="flex gap-10 mt-8">
 
@@ -210,7 +259,6 @@ export default function PerfilPublico() {
                 {pontos}
               </p>
             </div>
-
 
 
             <div>
@@ -376,9 +424,81 @@ export default function PerfilPublico() {
 
 
 
-
       </main>
+      {/* Natasha decoração */}
+<div className="
+absolute
+right-[-80px]
+bottom-[-100px]
+opacity-40
+pointer-events-none
+transition-transform
+duration-500
+hover:scale-105
+">
 
+  <img
+    src={natasha}
+    className="
+    w-[450px]
+    select-none
+    drop-shadow-[0_0_30px_rgba(0,0,0,0.8)]
+    opacity-42
+    "
+  />
+
+</div>
+{/* Noah decoração */}
+<div
+  className="
+  absolute
+  left-[-20px]
+  top-[100px]
+  opacity-42
+  pointer-events-none
+  transition-transform
+  hover:scale-110
+  
+  "
+>
+  <img
+    src={noah}
+    className="
+    w-[180px]
+    md:w-[220px]
+    lg:w-[260px]
+    rotate-6
+    drop-shadow-[0_0_20px_rgba(0,0,0,0.7)]
+    select-none
+    "
+  />
+</div>
+{imagemAberta && (
+  <div
+    onClick={() => setImagemAberta(null)}
+    className="
+    fixed inset-0
+    bg-black/80
+    flex
+    items-center
+    justify-center
+    z-50
+    p-10
+    "
+  >
+
+    <img
+      src={imagemAberta}
+      className="
+      max-h-full
+      max-w-full
+      object-contain
+      rounded-xl
+      "
+    />
+
+  </div>
+)}
 
     </div>
 
