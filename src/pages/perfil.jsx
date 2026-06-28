@@ -8,149 +8,244 @@ export default function Perfil() {
   const [user, setUser] = useState(null);
   const [meusAtaques, setMeusAtaques] = useState([]);
   const [loading, setLoading] = useState(true);
-const [profile, setProfile] = useState(null);
-const [editProfile, setEditProfile] = useState({
-  username: "",
-  bio: "",
-  avatar_url: "",
-});
-const [avatarFile, setAvatarFile] = useState(null);
-const [savingProfile, setSavingProfile] = useState(false);
-const [ataquesRecebidos, setAtaquesRecebidos] = useState([]);
+  const [profile, setProfile] = useState(null);
+  const [editProfile, setEditProfile] = useState({
+    username: "",
+    bio: "",
+    avatar_url: "",
+    ocs: [],
+  });
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [ataquesRecebidos, setAtaquesRecebidos] = useState([]);
   // Estilos globais do projeto
   const bebasStyle = { fontFamily: "'Bebas Neue', sans-serif" };
   const antonStyle = { fontFamily: "'Anton', sans-serif" };
+  const [ocFiles, setOcFiles] = useState([null, null, null]);
+  useEffect(() => {
+    async function getProfileData() {
+      const { data: { user } } = await supabase.auth.getUser();
 
-useEffect(() => {
-  async function getProfileData() {
-    const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
 
-    if (!user) {
-      navigate("/auth");
-      return;
+      setUser(user);
+
+      const username = user.user_metadata?.username || "Artista";
+      const time = user.user_metadata?.time || null;
+
+      let { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!profileData) {
+        const { data: newProfile, error: profileError } = await supabase
+          .from("profiles")
+          .insert({
+            id: user.id,
+            username,
+            time,
+            bio: "Um artista dedicado ao Art Fight ODV Edition. Pronto para desenhar e ser atacado!",
+            ocs: []
+          })
+          .select()
+          .single();
+
+        if (profileError) {
+          console.error(profileError);
+          alert("Não foi possível carregar/criar seu perfil.");
+          setLoading(false);
+          return;
+        }
+
+        profileData = newProfile;
+      }
+
+      setProfile(profileData);
+
+      setEditProfile({
+        username: profileData?.username || username,
+        bio: profileData?.bio || "",
+        avatar_url: profileData?.avatar_url || "",
+        ocs: profileData?.ocs || [],
+      });
+
+      const { data: ataques } = await supabase
+        .from("ataques")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      setMeusAtaques(ataques || []);
+
+      const nomeBusca = profileData?.username || username;
+
+      const { data: recebidos } = await supabase
+        .from("ataques")
+        .select("*")
+        .ilike("atacado", nomeBusca)
+        .order("created_at", { ascending: false });
+
+      setAtaquesRecebidos(recebidos || []);
+      setLoading(false);
     }
 
-    setUser(user);
+    getProfileData();
+  }, [navigate]);
+  async function handleSaveProfile() {
+    if (!user) return;
 
-    const username = user.user_metadata?.username || "Artista";
-    const time = user.user_metadata?.time || null;
+    setSavingProfile(true);
 
-    let { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .maybeSingle();
+    try {
 
-    if (!profileData) {
-      const { data: newProfile, error: profileError } = await supabase
+      let avatarUrl = editProfile.avatar_url;
+
+
+      // UPLOAD AVATAR NORMAL
+      if (avatarFile) {
+
+        const fileExt = avatarFile.name.split(".").pop();
+        const filePath = `${user.id}/avatar.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, avatarFile, {
+            upsert: true,
+          });
+
+        if (uploadError) throw uploadError;
+
+
+        const { data } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
+
+        avatarUrl = data.publicUrl;
+
+      }
+
+
+
+      // =========================
+      // UPLOAD DOS OCS
+      // =========================
+
+      let novosOCs = [...editProfile.ocs];
+
+
+      for (let i = 0; i < ocFiles.length; i++) {
+
+        if (ocFiles[i]) {
+
+          const file = ocFiles[i];
+
+          const ext = file.name.split(".").pop();
+
+          const path = `${user.id}/oc-${i}.${ext}`;
+
+
+          const { error: ocError } = await supabase.storage
+            .from("avatars")
+            .upload(path, file, {
+              upsert: true
+            });
+
+
+          if (ocError) throw ocError;
+
+
+          const { data } = supabase.storage
+            .from("avatars")
+            .getPublicUrl(path);
+
+
+
+          novosOCs[i] = {
+            name: novosOCs[i]?.name || "",
+            image: data.publicUrl
+          };
+
+        }
+
+      }
+
+
+      novosOCs = novosOCs.filter(oc => oc?.image);
+
+
+
+      // =========================
+      // SALVA PERFIL
+      // =========================
+
+      const { data, error } = await supabase
         .from("profiles")
-        .insert({
+        .upsert({
+
           id: user.id,
-          username,
-          time,
-          bio: "Um artista dedicado ao Art Fight ODV Edition. Pronto para desenhar e ser atacado!",
+
+          username: editProfile.username,
+
+          bio: editProfile.bio,
+
+          avatar_url: avatarUrl,
+
+          ocs: novosOCs,
+
+          time: user.user_metadata?.time || profile?.time || null,
+
+          updated_at: new Date().toISOString(),
+
         })
         .select()
         .single();
 
-      if (profileError) {
-        console.error(profileError);
-        alert("Não foi possível carregar/criar seu perfil.");
-        setLoading(false);
-        return;
-      }
 
-      profileData = newProfile;
+
+      if (error) throw error;
+
+
+
+      setProfile(data);
+
+      setEditProfile({
+
+        username: data.username || "",
+
+        bio: data.bio || "",
+
+        avatar_url: data.avatar_url || "",
+
+        ocs: data.ocs || [],
+
+      });
+
+
+      setAvatarFile(null);
+
+      setOcFiles([null, null, null]);
+
+
+      alert("Perfil atualizado!");
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert("Não foi possível salvar o perfil.");
+
+    } finally {
+
+      setSavingProfile(false);
+
     }
 
-    setProfile(profileData);
-
-    setEditProfile({
-      username: profileData?.username || username,
-      bio: profileData?.bio || "",
-      avatar_url: profileData?.avatar_url || "",
-    });
-
-    const { data: ataques } = await supabase
-      .from("ataques")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    setMeusAtaques(ataques || []);
-
-    const nomeBusca = profileData?.username || username;
-
-    const { data: recebidos } = await supabase
-      .from("ataques")
-      .select("*")
-      .ilike("atacado", nomeBusca)
-      .order("created_at", { ascending: false });
-
-    setAtaquesRecebidos(recebidos || []);
-    setLoading(false);
   }
-
-  getProfileData();
-}, [navigate]);
-  async function handleSaveProfile() {
-  if (!user) return;
-
-  setSavingProfile(true);
-
-  try {
-    let avatarUrl = editProfile.avatar_url;
-
-    if (avatarFile) {
-      const fileExt = avatarFile.name.split(".").pop();
-      const filePath = `${user.id}/avatar.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, avatarFile, {
-          upsert: true,
-        });
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from("avatars")
-        .getPublicUrl(filePath);
-
-      avatarUrl = data.publicUrl;
-    }
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .upsert({
-        id: user.id,
-        username: editProfile.username,
-        bio: editProfile.bio,
-        avatar_url: avatarUrl,
-        time: user.user_metadata?.time || profile?.time || null,
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    setProfile(data);
-    setEditProfile({
-      username: data.username || "",
-      bio: data.bio || "",
-      avatar_url: data.avatar_url || "",
-    });
-    setAvatarFile(null);
-
-    alert("Perfil atualizado!");
-  } catch (err) {
-    console.error(err);
-    alert("Não foi possível salvar o perfil.");
-  } finally {
-    setSavingProfile(false);
-  }
-}
   /// if pra mostrar loading enquanto busca os dados, pra evitar renderização com user null ou array vazio
   if (loading) return <div className="min-h-screen bg-[#0a0a0c] flex items-center justify-center text-white">Carregando...</div>;
   /// Cálculo do total de pontos somando os pontos de cada ataque
@@ -174,78 +269,201 @@ useEffect(() => {
       </div>
 
       <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
-<div className="lg:col-span-4 space-y-6">
-  <div className="bg-[#181825] border border-white/10 p-8 rounded-3xl flex flex-col items-center text-center">
-  <label className="w-32 h-32 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-full mb-4 border-4 border-[#0a0a0c] shadow-xl flex items-center justify-center overflow-hidden cursor-pointer">
-    {editProfile.avatar_url || avatarFile ? (
-      <img
-        src={avatarFile ? URL.createObjectURL(avatarFile) : editProfile.avatar_url}
-        alt="Foto de perfil"
-        className="w-full h-full object-cover"
-      />
-    ) : (
-      <span className="text-4xl font-bold">
-        {editProfile.username?.[0]?.toUpperCase() || "A"}
-      </span>
-    )}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-[#181825] border border-white/10 p-8 rounded-3xl flex flex-col items-center text-center">
+            <label className="w-32 h-32 bg-gradient-to-tr from-purple-600 to-blue-600 rounded-full mb-4 border-4 border-[#0a0a0c] shadow-xl flex items-center justify-center overflow-hidden cursor-pointer">
+              {editProfile.avatar_url || avatarFile ? (
+                <img
+                  src={avatarFile ? URL.createObjectURL(avatarFile) : editProfile.avatar_url}
+                  alt="Foto de perfil"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-4xl font-bold">
+                  {editProfile.username?.[0]?.toUpperCase() || "A"}
+                </span>
+              )}
 
-    <input
-      type="file"
-      accept="image/*"
-      className="hidden"
-      onChange={(e) => setAvatarFile(e.target.files[0])}
-    />
-  </label>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => setAvatarFile(e.target.files[0])}
+              />
+            </label>
 
-  <input
-    value={editProfile.username}
-    onChange={(e) => setEditProfile({ ...editProfile, username: e.target.value })}
-    className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 text-center text-white outline-none focus:border-purple-500 mb-3"
-  />
+            <input
+              value={editProfile.username}
+              onChange={(e) => setEditProfile({ ...editProfile, username: e.target.value })}
+              className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 text-center text-white outline-none focus:border-purple-500 mb-3"
+            />
 
-  <p className={`text-xs font-bold px-3 py-1 rounded-full uppercase mb-4 ${
-    user.user_metadata?.time === "alfa"
-      ? "bg-purple-500/20 text-purple-400"
-      : "bg-pink-500/20 text-pink-400"
-  }`}>
-    Time {user.user_metadata?.time || "Sem Time"}
-  </p>
+            <p className={`text-xs font-bold px-3 py-1 rounded-full uppercase mb-4 ${user.user_metadata?.time === "alfa"
+              ? "bg-purple-500/20 text-purple-400"
+              : "bg-pink-500/20 text-pink-400"
+              }`}>
+              Time {user.user_metadata?.time || "Sem Time"}
+            </p>
 
-  <textarea
-    value={editProfile.bio}
-    onChange={(e) => setEditProfile({ ...editProfile, bio: e.target.value })}
-    rows={4}
-    placeholder="Escreva sua descrição..."
-    className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 text-sm text-gray-300 outline-none focus:border-purple-500 resize-none"
-  />
+            <textarea
+              value={editProfile.bio}
+              onChange={(e) => setEditProfile({ ...editProfile, bio: e.target.value })}
+              rows={4}
+              placeholder="Escreva sua descrição..."
+              className="w-full bg-[#0a0a14] border border-white/10 rounded-lg p-3 text-sm text-gray-300 outline-none focus:border-purple-500 resize-none"
+            />
+            <div className="w-full mt-4">
 
-  <button
-    onClick={handleSaveProfile}
-    disabled={savingProfile}
-    className="mt-4 w-full bg-[#6355ff] hover:bg-[#5244e0] disabled:opacity-50 rounded-xl py-3 uppercase"
-    style={bebasStyle}
-  >
-    {savingProfile ? "Salvando..." : "Salvar Perfil"}
-  </button>
 
-  <div className="w-full grid grid-cols-3 gap-4 mt-6 border-t border-white/5 pt-6">
-    <div>
-      <p className="text-[10px] text-gray-500 uppercase">Feitos</p>
-      <p style={bebasStyle} className="text-2xl">{meusAtaques.length}</p>
-    </div>
+                <p className="text-sm text-gray-400 mb-3">
+                  OCs disponíveis para ataque.
+                </p>
 
-    <div>
-      <p className="text-[10px] text-gray-500 uppercase">Recebidos</p>
-      <p style={bebasStyle} className="text-2xl">{ataquesRecebidos.length}</p>
-    </div>
 
-    <div>
-      <p className="text-[10px] text-gray-500 uppercase">Pontos</p>
-      <p style={bebasStyle} className="text-2xl text-purple-400">{totalPontos}</p>
-    </div>
-  </div>
+                {[0, 1, 2].map((i) => (
+
+                  <div key={i} className="mb-4">
+
+                    <label className="
+block
+aspect-square
+bg-[#0a0a14]
+border
+border-white/10
+rounded-xl
+overflow-hidden
+cursor-pointer
+">
+
+
+{
+editProfile.ocs[i]?.image || editProfile.ocs[i]?.preview ? (
+
+<img
+src={
+  editProfile.ocs[i]?.image ||
+  editProfile.ocs[i]?.preview
+}
+className="w-full h-full object-cover"
+/>
+
+) : (
+
+<div className="h-full flex items-center justify-center text-gray-500">
+Adicionar OC
 </div>
-</div>
+
+)
+}
+
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+
+                          const file = e.target.files[0];
+
+                          const novosFiles = [...ocFiles];
+
+                          novosFiles[i] = file;
+
+                          setOcFiles(novosFiles);
+
+
+                          const novos = [...editProfile.ocs];
+
+                          novos[i] = {
+                            ...novos[i],
+                            preview: URL.createObjectURL(file)
+                          };
+
+
+                          setEditProfile({
+                            ...editProfile,
+                            ocs: novos
+                          });
+
+
+                        }}
+
+                      />
+
+                    </label>
+
+
+                    <input
+
+                      placeholder="Nome do OC"
+
+                      value={editProfile.ocs[i]?.name || ""}
+
+                      onChange={(e) => {
+
+                        const novos = [...editProfile.ocs];
+
+                        novos[i] = {
+                          ...novos[i],
+                          name: e.target.value
+                        };
+
+                        setEditProfile({
+                          ...editProfile,
+                          ocs: novos
+                        });
+
+                      }}
+
+                      className="
+w-full
+mt-2
+bg-[#0a0a14]
+border
+border-white/10
+rounded-lg
+p-2
+"
+
+                    />
+
+
+                  </div>
+
+
+                ))}
+
+
+              </div>
+
+
+            <button
+              onClick={handleSaveProfile}
+              disabled={savingProfile}
+              className="mt-4 w-full bg-[#6355ff] hover:bg-[#5244e0] disabled:opacity-50 rounded-xl py-3 uppercase"
+              style={bebasStyle}
+            >
+              {savingProfile ? "Salvando..." : "Salvar Perfil"}
+            </button>
+
+            <div className="w-full grid grid-cols-3 gap-4 mt-6 border-t border-white/5 pt-6">
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase">Feitos</p>
+                <p style={bebasStyle} className="text-2xl">{meusAtaques.length}</p>
+              </div>
+
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase">Recebidos</p>
+                <p style={bebasStyle} className="text-2xl">{ataquesRecebidos.length}</p>
+              </div>
+
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase">Pontos</p>
+                <p style={bebasStyle} className="text-2xl text-purple-400">{totalPontos}</p>
+              </div>
+            </div>
+          </div>
+        </div>
         {/* COLUNA DIREITA: SUA GALERIA */}
         <div className="lg:col-span-8">
           <h3 style={bebasStyle} className="text-2xl mb-6 flex items-center gap-3">
@@ -292,51 +510,51 @@ useEffect(() => {
           )}
         </div>
         <div className="mt-10">
-  <h3 style={bebasStyle} className="text-2xl mb-6 flex items-center gap-3">
-    Ataques Recebidos
-    <span className="text-xs bg-white/10 px-2 py-1 rounded text-gray-400">
-      {ataquesRecebidos.length}
-    </span>
-  </h3>
+          <h3 style={bebasStyle} className="text-2xl mb-6 flex items-center gap-3">
+            Ataques Recebidos
+            <span className="text-xs bg-white/10 px-2 py-1 rounded text-gray-400">
+              {ataquesRecebidos.length}
+            </span>
+          </h3>
 
-  {ataquesRecebidos.length > 0 ? (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-      {ataquesRecebidos.map((atk) => (
-        <div
-          key={atk.id}
-          className="group relative aspect-square bg-[#11111d] rounded-2xl border border-white/5 overflow-hidden hover:border-pink-500/50 transition-all"
-        >
-          <img
-            src={atk.thumbnail_url || atk.imagem_url}
-            alt={isVideoAttack(atk) ? "Animação recebida" : "Ataque recebido"}
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-          />
+          {ataquesRecebidos.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {ataquesRecebidos.map((atk) => (
+                <div
+                  key={atk.id}
+                  className="group relative aspect-square bg-[#11111d] rounded-2xl border border-white/5 overflow-hidden hover:border-pink-500/50 transition-all"
+                >
+                  <img
+                    src={atk.thumbnail_url || atk.imagem_url}
+                    alt={isVideoAttack(atk) ? "Animação recebida" : "Ataque recebido"}
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  />
 
-          {isVideoAttack(atk) && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/35">
-              <span className="w-10 h-10 rounded-full bg-white/90 text-black flex items-center justify-center text-lg">
-                ▶
-              </span>
+                  {isVideoAttack(atk) && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+                      <span className="w-10 h-10 rounded-full bg-white/90 text-black flex items-center justify-center text-lg">
+                        ▶
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
+                    <p className="text-[10px] text-white uppercase truncate">
+                      Por: {atk.atacante || "Anônimo"}
+                    </p>
+                    <p className="text-[10px] text-pink-400 font-bold">
+                      +{atk.pontos} PTS
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-40 flex items-center justify-center border-2 border-dashed border-white/5 rounded-3xl text-gray-600">
+              <p>Ninguém te atacou ainda.</p>
             </div>
           )}
-
-          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform">
-            <p className="text-[10px] text-white uppercase truncate">
-              Por: {atk.atacante || "Anônimo"}
-            </p>
-            <p className="text-[10px] text-pink-400 font-bold">
-              +{atk.pontos} PTS
-            </p>
-          </div>
         </div>
-      ))}
-    </div>
-  ) : (
-    <div className="h-40 flex items-center justify-center border-2 border-dashed border-white/5 rounded-3xl text-gray-600">
-      <p>Ninguém te atacou ainda.</p>
-    </div>
-  )}
-</div>
       </main>
     </div>
   );
